@@ -1,0 +1,94 @@
+{
+
+    "BookingPackage": [
+      "MINI (kuni 20 inimest)",
+      "MIDI (20-40 inimest)",
+      "MAXI (40-60 inimest)"
+    ],
+    "Role": ["CUSTOMER", "ADMIN"],
+    "Season": ["SUVI", "SUGIS", "KEVAD", "TALV"]
+  },
+
+{
+      "userId": "Long",
+      "userName": "String",
+      "email": "String",
+      "password": "String (hashed)",
+      "role": "Role"
+    },
+{
+      "bookingId": "Long",
+      "bookingNumber": "String (nt. B0001)",
+      "fullName": "String",
+      "email": "String",
+      "phoneNumber": "String",
+      "eventType": "String",
+      "locationAddress": "String (maja number, tänav, linn)",
+      "longitude": "Double",
+      "latitude": "Double",
+      "eventDate": "LocalDate",
+      "packageType": "BookingPackage",
+      "additionalInfo": "String",
+      "status": "BookingStatus",
+      "user": "User"
+    },
+ {
+      "eventId": "Long",
+      "name": "String",
+      "location": "String (linn/maakond)",
+      "startDate": "LocalDate",
+      "endDate": "LocalDate",
+      "description": "String",
+      "imageUrl": "String"
+    }
+  },
+    "POST /api/login": {
+      "request": "LoginRequestDto",
+      "response": "LoginResponseDto"
+    },
+    "POST /api/register": {
+      "request": "RegisterRequestDto",
+      "response": "UserDto"
+    },
+    "POST /api/bookings": {
+      "request": "BookingRequestDto",
+      "response": "BookingResponseDto"
+    },
+    "GET /api/bookings/my": {
+      "response": "List<BookingResponseDto>"
+    },
+    "PUT /api/bookings/{id}": {
+      "request": "BookingRequestDto",
+      "response": "BookingResponseDto"
+    },
+    "GET /api/admin/bookings": {
+      "params": "status? (OOTEL|KINNITATUD|TUHISTATUD), search?",
+      "response": "List<BookingResponseDto>"
+    },
+    "GET /api/admin/bookings/{id}": {
+      "response": "BookingResponseDto"
+    },
+    "PATCH /api/admin/bookings/{id}/status": {
+      "request": "{ status: BookingStatus }",
+      "response": "BookingResponseDto"
+    },
+    "POST /api/admin/bookings/{id}/email": {
+      "response": "void"
+    },
+    "GET /api/events": {
+      "params": "season? (SUVI|SUGIS|KEVAD|TALV)",
+      "response": "List<EventResponseDto>"
+    },
+    "POST /api/admin/events": {
+      "request": "EventRequestDto (multipart)",
+      "response": "EventResponseDto"
+    },
+    "PUT /api/admin/events/{id}": {
+      "request": "EventRequestDto (multipart)",
+      "response": "EventResponseDto"
+    },
+    "DELETE /api/admin/events/{id}": {
+      "response": "void"
+    }
+  }
+}

@@ -2,6 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Structure
+
+```
+proseccovan/
+├── CLAUDE.md                           # Üldised juhised Claude Code'ile (projekti tase)
+├── backend/                            # Serveri lähtekood (Spring Boot)
+│   ├── CLAUDE.md                       # Backendi juhised Claude Code'ile (Spring Boot, Java)
+│   ├── gradle/                         # Gradle wrapper failid
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── ee.bcs.projektinimi/            # Baaspakett
+│   │   │   │       ├── controller/                 # REST kontrollerid
+│   │   │   │       │   └── ressursipakett/         # Kontrolleri alampakett (nt user)
+│   │   │   │       │       ├── dto/                # Andmeedastuse objektid (DTO-d)
+│   │   │   │       │       └── SomeController.java # REST kontroller (nt UserController.java)
+│   │   │   │       ├── infrastructure/             # Ühine infrastruktuur
+│   │   │   │       │   ├── error/                  # Veavastuse mudel
+│   │   │   │       │   └── exception/              # Kohandatud erindiklassid
+│   │   │   │       ├── persistence/                # Andmebaasi entiteedid ja repositooriumid
+│   │   │   │       │   └── ressursipakett/         # Entiteedi alampakett (nt user)
+│   │   │   │       │       ├── Entity.java         # Entiteedi klass (nt User.java)
+│   │   │   │       │       ├── EntityMapper.java   # Mapperi liides
+│   │   │   │       │       └── EntityRepository.java # Repositooriumi liides
+│   │   │   │       └── service/                    # Äriloogika teenused
+│   │   │   └── resources/                          # Rakenduse konfiguratsioon
+│   │   └── test/                                   # Ühik- ja integratsioonitestid
+│   └── [konfiguratsioonifailid]                    # build.gradle, settings.gradle, gradlew jms
+│
+├── docs/                       # Dokumentatsioon ja õppematerjalid
+│   ├── database/                       # SQL skriptid
+│   │   ├── 1_reset_database.sql        # Skeemi kustutamine ja taasloomine
+│   │   ├── 2_create.sql                # Tabelite ja seoste loomine
+│   │   └── 3_import.sql                # Algsete andmete import
+│   └── tasks/                  # Ülesannete kirjeldused
+│
+└── frontend/                   # Kliendipoolne rakendus
+    ├── CLAUDE.md               # Frontendi juhised Claude Code'ile (Vue 3, Vite)
+    ├── public/                 # Avalikud staatilised failid (kopeeritakse buildi)
+    └── src/                    # Rakenduse lähtekood
+        ├── api-services/       # Axios API päringute teenused
+        ├── assets/             # Staatilised ressursid (pildid, fondid jms)
+        ├── auth/               # Autentimise loogika ja abifunktsioonid
+        ├── components/         # Korduvkasutatavad Vue komponendid
+        │   ├── common/         # Üldkasutatavad elemendid (nupud, sildid, laadijad)
+        │   ├── forms/          # Vormi komponendid (sisendid, validatsioon)
+        │   ├── modals/         # Modaalakende komponendid
+        │   └── tables/         # Tabelite komponendid
+        ├── navigation/         # Navigatsiooni komponendid
+        ├── router/             # Vue Router marsruutide konfiguratsioon
+        └── views/              # Lehekülgede komponendid (marsruutidega seotud)
+```
+
 ## Project Overview
 
 Full-stack web application with a Spring Boot backend and Vue 3 frontend. The name **proseccovan** refers to the project itself (likely a banking/finance app — the Spring app name is `bank40back`).
