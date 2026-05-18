@@ -143,7 +143,7 @@ Kasuta järgmist struktuuri:
 
 ## Mocki vaade
 
-**Mock:** Vt `docs/ProseccoVan (1).pdf`, lehekülg _&lt;N&gt;_
+![<VaateNimi> mock](../../png/<VaateNimi>.vue.png)
 
 ## API leping
 

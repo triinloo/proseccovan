@@ -1,0 +1,5 @@
+{
+  "userId": 0,
+  "role": "string (CUSTOMER | ADMIN)",
+  "userName": "string"
+}

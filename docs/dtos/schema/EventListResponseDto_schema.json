@@ -1,0 +1,10 @@
+{
+  "eventId": 0,
+  "eventName": "string",
+  "eventDescription": "string",
+  "eventStartDate": "2000-01-01",
+  "eventEndDate": "2000-01-01",
+  "eventLocation": "string",
+  "imageData": "string",
+  "eventSeason": "string (KEVAD | SUVI | SÜGIS | TALV)"
+}
