@@ -38,21 +38,26 @@ Moodusta **taski failinimi** endpointi põhjal: asenda `/` sidekriipsuga ja eema
 ### 3. Loe PDF-ist vaate info
 
 Loe PDF fail otse `Read` tööriistaga:
-- Fail: `docs/mock/IJ mock.pdf`
+- Fail: `docs/ProseccoVan (1).pdf`
 
-PDF-is on 10 lehekülge. Leia õige lehekülg vaate nime järgi — igal lehel on päises faili nimi (nt `LoginView.vue`).
+PDF-is on 15 lehekülge. Leia õige lehekülg vaate nime järgi — igal lehel on päises faili nimi (nt `LoginView.vue`).
 
 Lehekülgede järjekord:
-1. HomeView
-2. LoginView
-3. LogoutModal
-4. RegisterView
-5. DashboardView
-6. TradeLog
-7. WatchlistView
-8. PortfolioView
-9. DetailsView
-10. MALL (mall/template)
+1. HomeView.vue — URL: `/`
+2. LoginView.vue — URL: `/login` (normaalne olek)
+3. LoginView.vue — URL: `/login` (vea olek)
+4. RegisterView.vue — URL: `/register`
+5. CustomerBookingFormView.vue — URL: `/booking-form` (broneerimisankeet)
+6. CustomerBookingFormView.vue — URL: `/booking-form` (kaardi modal)
+7. CustomerBookingsView.vue — URL: `/customer-bookings`
+8. CustomerBookingView.vue — URL: `/customer-booking`
+9. CustomerChangeBookingFormView.vue — URL: `/customer-change-booking-form`
+10. EventsView.vue — URL: `/events`
+11. AdminBookingsView.vue — URL: `/admin-bookings`
+12. AdminBookingView.vue — URL: `/admin-bookings/:bookingId`
+13. AdminEventsView.vue — URL: `/admin-events`
+14. AdminEventFormView.vue — URL: `/admin-event-form`
+15. ErrorView.vue — URL: `/error`
 
 Kogu vastavalt lehekülje sisule:
 
@@ -70,7 +75,7 @@ Kui PDF lugemine annab ebaselge tulemuse mõne välja osas, küsi kasutajalt tä
 
 ### 4. Loe andmebaasi skeem
 
-Loe fail: `database/2_create.sql`
+Loe fail: `backend/database/2_create.sql`
 
 Tuvasta, millised tabelid on seotud selle endpointiga (põhinedes DTO väljade nimedel ja domeeni kontekstil).
 
@@ -138,7 +143,7 @@ Kasuta järgmist struktuuri:
 
 ## Mocki vaade
 
-![<VaateNimi> mock](../../mock/pictures/<VaateNimi>.png)
+**Mock:** Vt `docs/ProseccoVan (1).pdf`, lehekülg _&lt;N&gt;_
 
 ## API leping
 
@@ -179,8 +184,8 @@ Kasuta järgmist struktuuri:
 
 > **Märkus veahalduse kohta:**
 > Kontrolli, kas vajalikud `ErrorResponse` enum kirjed ja exception klassid juba eksisteerivad:
-> - `backend/src/main/java/ee/valiit/ijournal/infrastructure/error/ErrorResponse.java`
-> - `backend/src/main/java/ee/valiit/ijournal/infrastructure/exception/`
+> - `backend/src/main/java/proseccovan/backend/infrastructure/error/ErrorResponse.java`
+> - `backend/src/main/java/proseccovan/backend/infrastructure/exception/`
 >
 > Puuduvate enum kirjete puhul lisa need `ErrorResponse`-i. Puuduvate exception klasside puhul loo uus klass `exception/` paketti (järgi olemasolevate klasside mustrit) ja registreeri see `RestExceptionHandler`-is.
 
