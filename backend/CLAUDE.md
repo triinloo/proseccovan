@@ -26,3 +26,15 @@ To toggle SQL logging: swap the `spring.datasource.url` and `driverClassName` li
 - **MapStruct**: configured with `defaultComponentModel=spring` — all mappers are Spring beans. Use constructor or `@Autowired` injection. `unmappedTargetPolicy=IGNORE` means unmapped target fields silently stay null.
 - **Lombok**: use `@Data`, `@Builder`, `@RequiredArgsConstructor` etc. throughout. Avoid writing boilerplate getters/setters/constructors by hand.
 - **Package structure**: root package is `proseccovan.backend`. Organize by feature (e.g. `proseccovan.backend.account`, `proseccovan.backend.user`), not by layer.
+- **Swagger documentation**: every controller endpoint MUST have `@Operation` and `@ApiResponses` annotations. `@Operation` must include both `summary` (lühikirjeldus koos tagastatavate väljadega) and `description` (käitumine ja veatingimuseed). `@ApiResponse` must cover every HTTP status the endpoint can return; error responses must reference `ApiError.class` via `@Content(schema = @Schema(implementation = ApiError.class))`. Example:
+  ```java
+  @Operation(summary = "Sisse logimine. Tagastab userId ja roleName",
+          description = """
+                  Süsteemist otsitakse username ja password abil kasutajat, kelle konto on ka aktiivne.
+                  Kui vastet ei leita visatakse viga errorCode'ga 111""")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(responseCode = "403",
+                  description = "Vale kasutajanimi või parool",
+                  content = @Content(schema = @Schema(implementation = ApiError.class)))})
+  ```

@@ -1,0 +1,12 @@
+{
+  "customerName": "string",
+  "email": "string",
+  "phoneNumber": "string",
+  "bookingType": "string",
+  "bookingDate": "2000-01-01",
+  "address": "string",
+  "latitude": "string",
+  "longitude": "string",
+  "packageType": "string (MINI | MIDI | MAXI)",
+  "bookingInfo": "string"
+}

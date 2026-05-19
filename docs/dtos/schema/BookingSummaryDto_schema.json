@@ -1,0 +1,9 @@
+{
+  "bookingId": "string (B0001)",
+  "customerName": "string",
+  "bookingDate": "2000-01-01",
+  "bookingType": "string",
+  "location": "string",
+  "packageType": "string (MINI | MIDI | MAXI)",
+  "bookingStatus": "string (OOTEL | KINNITATUD | TÜHISTATUD)"
+}

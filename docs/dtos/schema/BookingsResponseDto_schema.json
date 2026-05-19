@@ -1,0 +1,13 @@
+{
+  "customerName": "string",
+  "email": "string",
+  "phoneNumber": "string",
+  "bookingDate": "2000-01-01",
+  "bookingType": "string",
+  "packageType": "string (MINI | MIDI | MAXI)",
+  "address": "string",
+  "latitude": "string",
+  "longitude": "string",
+  "bookingInfo": "string",
+  "bookingStatus": "string (OOTEL | KINNITATUD | TÜHISTATUD)"
+}
