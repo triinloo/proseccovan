@@ -1,39 +1,54 @@
 package proseccovan.backend.persistence.event;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import proseccovan.backend.persistence.user.User;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "event")
+@Table(name = "event", schema = "proseccovan")
 public class Event {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by_user_id")
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "created_by_user_id", nullable = false)
     private User createdByUser;
 
-    @Column(name = "name")
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "location")
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "location", nullable = false)
     private String location;
 
-    @Column(name = "start_date")
+    @NotNull
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @NotNull
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "description")
+    @Size(max = 500)
+    @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "image_url")
+    @Size(max = 500)
+    @Column(name = "image_url", length = 500)
     private String imageUrl;
+
+
 }

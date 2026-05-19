@@ -1,17 +1,25 @@
 package proseccovan.backend.persistence.role;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "role")
+@Table(name = "role", schema = "proseccovan")
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name")
+    @Size(max = 20)
+    @NotNull
+    @Column(name = "name", nullable = false, length = 20)
     private String name;
+
+
 }

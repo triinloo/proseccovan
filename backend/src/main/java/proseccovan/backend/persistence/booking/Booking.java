@@ -1,45 +1,59 @@
 package proseccovan.backend.persistence.booking;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import proseccovan.backend.persistence.bookingpackage.BookingPackage;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import proseccovan.backend.persistence.bookingpackage.Package;
 import proseccovan.backend.persistence.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "booking")
+@Table(name = "booking", schema = "proseccovan")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "package_id")
-    private BookingPackage bookingPackage;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "package_id", nullable = false)
+    private Package packageField;
 
-    @Column(name = "address")
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", precision = 11, scale = 8)
     private BigDecimal longitude;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude", precision = 10, scale = 8)
     private BigDecimal latitude;
 
-    @Column(name = "event_date")
+    @NotNull
+    @Column(name = "event_date", nullable = false)
     private LocalDate eventDate;
 
-    @Column(name = "status")
+    @NotNull
+    @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
     private String status;
 
-    @Column(name = "booking_type_info")
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "booking_type_info", nullable = false)
     private String bookingTypeInfo;
+
+
 }
