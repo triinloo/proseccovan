@@ -29,6 +29,7 @@ Broneerimispäringu loomise endpoint, mida kasutab `CustomerBookingFormView.vue`
 
 | Väli            | Tüüp     | Kirjeldus                                         |
 |-----------------|----------|---------------------------------------------------|
+| `userId`        | `Integer` | Sisselogitud kasutaja ID                         |
 | `customerName`  | `String` | Kliendi ees- ja perekonnanimi                     |
 | `email`         | `String` | Kliendi e-posti aadress                           |
 | `phoneNumber`   | `String` | Kliendi telefoninumber                            |

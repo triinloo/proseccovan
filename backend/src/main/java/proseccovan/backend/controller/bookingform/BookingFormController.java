@@ -17,6 +17,7 @@ public class BookingFormController {
 
     @PostMapping("/booking-form")
     public void createNewBooking(@RequestBody BookingCreateRequestDto bookingCreateRequestDto) {
+        bookingFormService.createNewBooking(bookingCreateRequestDto);
 
     }
 }
