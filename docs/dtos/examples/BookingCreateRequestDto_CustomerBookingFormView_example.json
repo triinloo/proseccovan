@@ -1,0 +1,12 @@
+{
+  "customerName": "Mari Mets",
+  "email": "mari.mets@email.com",
+  "phoneNumber": "+372 5123 4567",
+  "bookingType": "Sünnipäev",
+  "bookingDate": "25/06/2026",
+  "address": "Pärnu mnt 15, Tallinn, Harjumaa",
+  "latitude": "59.44939985457879",
+  "longitude": "24.73847931310721",
+  "packageType": "MIDI",
+  "bookingInfo": "Lapsevanema sünnipäev, oodatakse umbes 30 külalist"
+}

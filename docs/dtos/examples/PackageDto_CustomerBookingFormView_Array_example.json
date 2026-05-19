@@ -1,0 +1,20 @@
+[
+  {
+    "packageId": 1,
+    "packageName": "MINI",
+    "packageDescription": "Mini (kuni 20 inimest)",
+    "isSelected": false
+  },
+  {
+    "packageId": 2,
+    "packageName": "MIDI",
+    "packageDescription": "Midi (20-40 inimest)",
+    "isSelected": false
+  },
+  {
+    "packageId": 3,
+    "packageName": "MAXI",
+    "packageDescription": "Maxi (40-60 inimest)",
+    "isSelected": false
+  }
+]
