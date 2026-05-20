@@ -1,4 +1,4 @@
-package proseccovan.backend.controller.bookingform.dto;
+package proseccovan.backend.controller.booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +24,3 @@ public class BookingCreateRequestDto {
     private String bookingInfo;
 
 }
-
-

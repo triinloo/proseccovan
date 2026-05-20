@@ -1,8 +1,8 @@
-package proseccovan.backend.controller.customerbooking.dto;
+package proseccovan.backend.controller.booking.dto;
 
-import lombok.*;
-
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

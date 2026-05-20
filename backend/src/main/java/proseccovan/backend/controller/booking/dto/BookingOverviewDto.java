@@ -1,4 +1,4 @@
-package proseccovan.backend.controller.customerbookings.dto;
+package proseccovan.backend.controller.booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingSummaryDto {
+public class BookingOverviewDto {
     private String bookingId;
     private String customerName;
     private String bookingDate;
