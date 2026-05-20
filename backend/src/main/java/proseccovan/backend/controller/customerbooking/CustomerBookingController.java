@@ -29,7 +29,7 @@ public class CustomerBookingController {
                     description = "Broneeringut ei leitud",
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
-    @GetMapping("/customer-bookings/{bookingId}")
+    @GetMapping("/customer-booking/{bookingId}")
     public BookingResponseDto getBookingById(@PathVariable Integer bookingId) {
         return customerBookingService.getBookingById(bookingId);
     }
@@ -46,7 +46,7 @@ public class CustomerBookingController {
                     description = "Broneeringut ei saa tühistada",
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
-    @DeleteMapping("/customer-bookings/{bookingId}")
+    @DeleteMapping("/customer-booking/{bookingId}")
     public void cancelBooking(@PathVariable Integer bookingId) {
         customerBookingService.cancelBooking(bookingId);
     }
