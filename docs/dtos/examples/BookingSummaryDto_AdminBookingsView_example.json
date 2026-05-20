@@ -1,0 +1,9 @@
+{
+  "bookingId": "B0001",
+  "customerName": "Mari Mets",
+  "bookingDate": "15/06/2026",
+  "bookingType": "Sünnipäev",
+  "location": "Pärna 5, Tartu",
+  "packageType": "MINI",
+  "bookingStatus": "KINNITATUD"
+}

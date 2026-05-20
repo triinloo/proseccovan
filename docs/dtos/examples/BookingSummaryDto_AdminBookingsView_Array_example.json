@@ -1,0 +1,38 @@
+[
+  {
+    "bookingId": "B0001",
+    "customerName": "Mari Mets",
+    "bookingDate": "15/06/2026",
+    "bookingType": "Sünnipäev",
+    "location": "Pärna 5, Tartu",
+    "packageType": "MINI",
+    "bookingStatus": "OOTEL"
+  },
+  {
+    "bookingId": "B0002",
+    "customerName": "Mari Mets",
+    "bookingDate": "20/07/2026",
+    "bookingType": "Pulmad",
+    "location": "Vabaduse väljak 1, Tallinn",
+    "packageType": "MAXI",
+    "bookingStatus": "KINNITATUD"
+  },
+  {
+    "bookingId": "B0003",
+    "customerName": "Jaan Tamm",
+    "bookingDate": "05/08/2026",
+    "bookingType": "Firmapidu",
+    "location": "Rüütli 10, Pärnu",
+    "packageType": "MIDI",
+    "bookingStatus": "OOTEL"
+  },
+  {
+    "bookingId": "B0004",
+    "customerName": "Jaan Tamm",
+    "bookingDate": "30/05/2026",
+    "bookingType": "Sünnipäev",
+    "location": "Raekoja plats 3, Tartu",
+    "packageType": "MINI",
+    "bookingStatus": "TÜHISTATUD"
+  }
+]
