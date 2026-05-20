@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import proseccovan.backend.controller.customerbooking.dto.BookingResponseDto;
 import proseccovan.backend.controller.customerbookings.dto.BookingSummaryDto;
 import proseccovan.backend.infrastructure.error.ApiError;
 import proseccovan.backend.service.AdminBookingsService;
@@ -20,15 +21,29 @@ public class AdminBookingsController {
 
     private final AdminBookingsService adminBookingsService;
 
+    @GetMapping("/admin-bookings")
     @Operation(
-            summary = "Kõikide broneeringute nimekiri. Tagastab bookingId, customerName, bookingDate, bookingType, location, packageType, bookingStatus",
-            description = "Tagastab kõik broneeringud. Valikuline status parameeter filtreerib tulemusi (OOTEL, KINNITATUD, TÜHISTATUD).")
+            summary = "Kõikide broneeringute nimekiri.",
+            description = "Tagastab kõik broneeringud. Kui status on 'A' (ALL), siis statuse järgi filtreerimist ei toimu, vaid leitakse kõik broneeringud.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    @GetMapping("/admin-bookings")
-    public List<BookingSummaryDto> getBookings(@RequestParam(required = false) String status) {
+    public List<BookingSummaryDto> getBookings(@RequestParam String status) {
         return adminBookingsService.getBookings(status);
+    }
+
+    @GetMapping("/admin-bookings/{bookingId}")
+    @Operation(
+            summary = "Broneeringu detailvaade (admin). Tagastab customerName, email, phoneNumber, bookingDate, bookingType, packageType, address, latitude, longitude, bookingInfo, bookingStatus",
+            description = "Tagastab ühe broneeringu kõik detailid bookingId järgi. Kui broneeringut ei leita, visatakse viga errorCode'ga 333.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404",
+                    description = "Broneeringut ei leitud",
+                    content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    public BookingResponseDto getBookingById(@PathVariable Integer bookingId) {
+        return adminBookingsService.getBookingById(bookingId);
     }
 
     @Operation(

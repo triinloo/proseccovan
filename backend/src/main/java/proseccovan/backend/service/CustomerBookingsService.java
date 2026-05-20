@@ -31,7 +31,7 @@ public class CustomerBookingsService {
         }
 
         UserContact userContact = userContactRepository.findByUser_Id(userId);
-        List<Booking> bookings = bookingRepository.findByUser_Id(userId);
+        List<Booking> bookings = bookingRepository.findBookingsBy(userId);
 
         List<BookingSummaryDto> result = new ArrayList<>();
         for (Booking booking : bookings) {
