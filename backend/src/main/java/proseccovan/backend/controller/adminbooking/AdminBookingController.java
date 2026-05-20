@@ -8,9 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import proseccovan.backend.controller.adminbooking.dto.AdminBookingResponseDto;
+import proseccovan.backend.controller.adminbooking.dto.EmailRequestDto;
 import proseccovan.backend.controller.customerbookings.dto.BookingSummaryDto;
 import proseccovan.backend.infrastructure.error.ApiError;
 import proseccovan.backend.service.AdminBookingService;
@@ -35,6 +39,21 @@ public class AdminBookingController {
     @GetMapping("/bookings")
     public List<BookingSummaryDto> getAdminBookings() {
         return adminBookingService.getAdminBookings();
+    }
+
+    @Operation(
+            summary = "Ühe broneeringu detailid ID järgi. Tagastab bookingId, customerName, email, phoneNumber, bookingDate, bookingType, bookingPackageType, bookingAddress, latitude, longitude, info, bookingStatus",
+            description = "Tagastab konkreetse broneeringu kõik detailid admin detailvaate jaoks. Kui broneeringut ei leita, tagastatakse 404 koos DATA_NOT_FOUND veaga. Autentimine nõutav (TODO: Spring Security).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Broneeringut ei leitud",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "401", description = "Autentimata kasutaja",
+                    content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @GetMapping("/bookings/{bookingId}")
+    public AdminBookingResponseDto getAdminBookingById(@PathVariable Integer bookingId) {
+        return adminBookingService.getAdminBookingById(bookingId);
     }
 
     @Operation(
@@ -65,5 +84,20 @@ public class AdminBookingController {
     @PutMapping("/bookings/{bookingId}/cancel")
     public BookingSummaryDto cancelBooking(@PathVariable Integer bookingId) {
         return adminBookingService.cancelBooking(bookingId);
+    }
+
+    @Operation(
+            summary = "Saada email kliendile broneeringu ID järgi",
+            description = "Saadab vabas vormis emaili broneeringuga seotud kliendi emailiaadressile. Kui broneeringut ei leita, tagastatakse 404 koos DATA_NOT_FOUND veaga. Autentimine nõutav (TODO: Spring Security).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email saadetud"),
+            @ApiResponse(responseCode = "404", description = "Broneeringut ei leitud",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "401", description = "Autentimata kasutaja",
+                    content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @PostMapping("/bookings/{bookingId}/email")
+    public void sendEmailToCustomer(@PathVariable Integer bookingId, @RequestBody EmailRequestDto emailRequestDto) {
+        adminBookingService.sendEmailToCustomer(bookingId, emailRequestDto);
     }
 }

@@ -1,7 +1,11 @@
 package proseccovan.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import proseccovan.backend.controller.adminbooking.dto.AdminBookingResponseDto;
+import proseccovan.backend.controller.adminbooking.dto.EmailRequestDto;
 import proseccovan.backend.controller.customerbookings.dto.BookingSummaryDto;
 import proseccovan.backend.persistence.booking.Booking;
 import proseccovan.backend.persistence.booking.BookingRepository;
@@ -22,6 +26,38 @@ public class AdminBookingService {
 
     private final BookingRepository bookingRepository;
     private final UserContactRepository userContactRepository;
+    private final JavaMailSender mailSender;
+
+    public void sendEmailToCustomer(Integer bookingId, EmailRequestDto dto) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(booking.getUser().getEmail());
+        message.setSubject(dto.getEmailTitle());
+        message.setText(dto.getEmailMessage());
+        mailSender.send(message);
+    }
+
+    public AdminBookingResponseDto getAdminBookingById(Integer bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+        UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
+        return new AdminBookingResponseDto(
+                String.format("B%04d", booking.getId()),
+                userContact.getUserName(),
+                booking.getUser().getEmail(),
+                userContact.getPhone(),
+                booking.getEventDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                booking.getBookingTypeInfo(),
+                booking.getPackageField().getName(),
+                booking.getAddress(),
+                booking.getLatitude() != null ? booking.getLatitude().toPlainString() : null,
+                booking.getLongitude() != null ? booking.getLongitude().toPlainString() : null,
+                booking.getPackageField().getDescription(),
+                BookingStatusMapper.toBookingStatus(booking.getStatus())
+        );
+    }
 
     public BookingSummaryDto confirmBooking(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
