@@ -26,8 +26,10 @@ public class BookingFormService {
     public void createNewBooking(BookingCreateRequestDto bookingCreateRequestDto) {
         User user = userRepository.findById(bookingCreateRequestDto.getUserId())
                 .orElseThrow(() -> new ForbiddenException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+
         Package foundPackage = packageRepository.findPackageByType(bookingCreateRequestDto.getPackageType())
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+
         Booking booking = Booking.builder()
                 .user(user)
                 .packageField(foundPackage)
