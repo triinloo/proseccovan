@@ -1,24 +1,24 @@
-# GET /api/customer-bookings/{bookingId}
+# GET /api/customer-booking/{bookingId}
 
-**Kontroller:** `CustomerChangeBookingFormController.java`
+**Kontroller:** `CustomerBookingController.java`
 **Tüüp:** Backend
 **Staatus:** To Do
 
 ## Kontekst
 
-Broneeringu muutmisvormi eeltäitmise endpoint, mida kasutab `CustomerChangeBookingFormView.vue` (URL: `/customer-change-booking-form`). Lehe avamisel laaditakse olemasoleva broneeringu andmed vormi väljadele. Ees- ja perekonnanimi ning sündmuse tüüp on vormil kirjutuskaitstud. Samal lehel on ka `PATCH /api/customer-bookings/{bookingId}` muutmise salvestamise endpoint.
+Ühe broneeringu detailvaate endpoint, mida kasutab `CustomerBookingView.vue` (URL: `/customer-booking`). Klient näeb broneeringu kõiki andmeid — kontaktinfo, sündmuse aeg, tüüp, pakett, asukoht kaardil ja staatus. "Vaata kaardil" nupp kasutab latitude/longitude koordinaate. "Sulge" nupp viib tagasi `CustomerBookingsView.vue` lehele. Samal lehel on ka `DELETE /api/customer-booking/{bookingId}` tühistamise endpoint.
 
 ## Mocki vaade
 
-![CustomerChangeBookingFormView mock](../../png/CustomerChangeBookingFormView.vue.png)
+![CustomerBookingView mock](../../png/CustomerBookingView.vue.png)
 
 ## API leping
 
-| Väli   | Väärtus                              |
-|--------|--------------------------------------|
-| Meetod | `GET`                                |
-| Tee    | `/api/customer-bookings/{bookingId}` |
-| Auth   | Ei                                   |
+| Väli   | Väärtus                             |
+|--------|-------------------------------------|
+| Meetod | `GET`                               |
+| Tee    | `/api/customer-booking/{bookingId}` |
+| Auth   | Ei                                  |
 
 ### Request Body
 
@@ -27,7 +27,7 @@ Puudub — GET päring
 ### Response Body — `BookingResponseDto.java`
 
 > Schema: [`BookingResponseDto_schema.json`](../../dtos/schema/BookingResponseDto_schema.json)
-> Näidis: [`BookingRequestDto_CustomerChangeBookingFormView_example.json`](../../dtos/examples/BookingRequestDto_CustomerChangeBookingFormView_example.json)
+> Näidis: [`BookingResponseDto_CustomerBookingView_example.json`](../../dtos/examples/BookingResponseDto_CustomerBookingView_example.json)
 
 | Väli            | Tüüp     | Allikas (DB tabel.veerg)                               |
 |-----------------|----------|--------------------------------------------------------|
@@ -64,7 +64,7 @@ Loetakse `booking` tabelist rida `bookingId` järgi. Kasutaja andmed loetakse `u
 
 ## Vastuvõtu kriteeriumid
 
-- [ ] `GET /api/customer-bookings/{bookingId}` tagastab HTTP 200 ja `BookingResponseDto`
+- [ ] `GET /api/customer-booking/{bookingId}` tagastab HTTP 200 ja `BookingResponseDto`
 - [ ] Broneeringut ei leitud: tagastab HTTP 404 koos `DATA_NOT_FOUND` veaga
 - [ ] `bookingDate` on formaadis dd/MM/yyyy
 - [ ] `bookingStatus` on loetav tekst (OOTEL / KINNITATUD / TÜHISTATUD), mitte ühetäheline kood
