@@ -3,8 +3,7 @@ package proseccovan.backend.persistence.booking;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import proseccovan.backend.persistence.bookingpackage.Package;
 import proseccovan.backend.persistence.user.User;
 
@@ -13,6 +12,9 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "booking", schema = "proseccovan")
 public class Booking {
