@@ -1,4 +1,4 @@
-# POST /api/admin/events
+ # POST /api/admin/events
 
 **Kontroller:** `AdminEventController.java`
 **Tüüp:** Backend
