@@ -14,6 +14,8 @@ import proseccovan.backend.service.CustomerBookingService;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+
+
 public class CustomerBookingController {
 
     private final CustomerBookingService customerBookingService;
@@ -31,4 +33,22 @@ public class CustomerBookingController {
     public BookingResponseDto getBookingById(@PathVariable Integer bookingId) {
         return customerBookingService.getBookingById(bookingId);
     }
+
+    @Operation(
+            summary = "Broneeringu tühistamine",
+            description = "Tühistab broneeringu bookingId järgi. Tühistamine on lubatud ainult OOTEL staatuses. Kui broneeringut ei leita, visatakse viga errorCode'ga 333. Kui staatus ei ole OOTEL, visatakse viga errorCode'ga 444.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404",
+                    description = "Broneeringut ei leitud",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "403",
+                    description = "Broneeringut ei saa tühistada",
+                    content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @DeleteMapping("/customer-bookings/{bookingId}")
+    public void cancelBooking(@PathVariable Integer bookingId) {
+        customerBookingService.cancelBooking(bookingId);
+    }
+
 }
