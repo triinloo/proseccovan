@@ -29,7 +29,8 @@ public class CustomerChangeBookingFormService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
 
-        Package bookingPackage = packageRepository.findByName(request.getPackageType());
+        Package bookingPackage = packageRepository.findByName(request.getPackageType())
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
 
         booking.setEventDate(request.getBookingDate());

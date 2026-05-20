@@ -9,6 +9,5 @@ public interface PackageRepository extends JpaRepository<Package, Integer> {
 
     @Query("select p from Package p where p.name = :name")
     Optional<Package> findPackageByType(String name);
-
-    Package findByName(String name);
+    Optional<Package> findByName(String name);
 }
