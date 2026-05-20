@@ -1,0 +1,14 @@
+{
+  "bookingId": "B0001",
+  "customerName": "Mari Mets",
+  "email": "mari.mets@gmail.com",
+  "phoneNumber": "+372 5123 4567",
+  "bookingDate": "15/06/2026",
+  "bookingType": "Sünnipäev",
+  "bookingPackageType": "MINI",
+  "bookingAddress": "Pärna 5, Tartu",
+  "latitude": "58.37940000",
+  "longitude": "26.72509000",
+  "info": "Kuni 20 inimest",
+  "bookingStatus": "OOTEL"
+}
