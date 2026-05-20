@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3 mb-5">
     <RouterLink class="navbar-brand" to="/">Prosecco Van</RouterLink>
     <button
       class="navbar-toggler"
@@ -15,7 +15,7 @@
         <RouterLink class="nav-link" to="/events">Sündmused</RouterLink>
       </div>
       <div>
-        <RouterLink class="btn btn-outline-dark" to="/login">Logi sisse / registreeru</RouterLink>
+        <RouterLink class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
       </div>
     </div>
   </nav>

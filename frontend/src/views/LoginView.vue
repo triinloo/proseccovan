@@ -1,9 +1,14 @@
 <template>
   <div class="container text-center">
-    <div class="col col-4">
-      <h2 class="mb-4">Logi sisse/registreeri</h2>
-      <div class="col col-6">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <h3 class="mb-3">Logi sisse / registreeri</h3>
         <AlertError :error-message="errorMessage" />
+        <div class="form-floating mb-3">
+          <input
+          v-model="email"
+          type="email">
+        </div>
       </div>
     </div>
   </div>
