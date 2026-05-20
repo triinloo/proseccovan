@@ -14,10 +14,10 @@ public class BookingResponseDto {
     private String phoneNumber;
     private String bookingDate;
     private String bookingType;
-    private String bookingPackageType;
-    private String bookingAddress;
+    private String packageType;
+    private String address;
     private String latitude;
     private String longitude;
-    private String info;
+    private String bookingInfo;
     private String bookingStatus;
 }
