@@ -1,6 +1,5 @@
 package proseccovan.backend.controller.bookingform.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,3 +24,5 @@ public class BookingCreateRequestDto {
     private String bookingInfo;
 
 }
+
+
