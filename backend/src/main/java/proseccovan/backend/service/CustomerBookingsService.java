@@ -6,6 +6,7 @@ import proseccovan.backend.controller.customerbookings.dto.BookingSummaryDto;
 import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.persistence.booking.Booking;
 import proseccovan.backend.persistence.booking.BookingRepository;
+import proseccovan.backend.persistence.booking.BookingStatusMapper;
 import proseccovan.backend.persistence.user.UserRepository;
 import proseccovan.backend.persistence.usercontact.UserContact;
 import proseccovan.backend.persistence.usercontact.UserContactRepository;
@@ -37,23 +38,15 @@ public class CustomerBookingsService {
     }
 
     private BookingSummaryDto toBookingSummaryDto(Booking booking, UserContact userContact) {
-        BookingSummaryDto dto = new BookingSummaryDto();
-        dto.setBookingId(String.format("B%04d", booking.getId()));
-        dto.setCustomerName(userContact.getUserName());
-        dto.setBookingDate(booking.getEventDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        dto.setBookingType(booking.getBookingTypeInfo());
-        dto.setLocation(booking.getAddress());
-        dto.setPackageType(booking.getPackageField().getName());
-        dto.setBookingStatus(toBookingStatus(booking.getStatus()));
-        return dto;
+        return new BookingSummaryDto(
+                String.format("B%04d", booking.getId()),
+                userContact.getUserName(),
+                booking.getEventDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                booking.getBookingTypeInfo(),
+                booking.getAddress(),
+                booking.getPackageField().getName(),
+                BookingStatusMapper.toBookingStatus(booking.getStatus())
+        );
     }
 
-    private String toBookingStatus(String status) {
-        return switch (status) {
-            case "O" -> "OOTEL";
-            case "K" -> "KINNITATUD";
-            case "T" -> "TÜHISTATUD";
-            default -> status;
-        };
-    }
 }
