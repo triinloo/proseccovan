@@ -1,0 +1,32 @@
+[
+  {
+    "eventId": 1,
+    "eventName": "Viljandi Folk",
+    "eventDescription": "Experience gourmet food and exquisite wines, featuring our finest prosecco.",
+    "eventStartDate": "2024-08-15",
+    "eventEndDate": "2024-08-15",
+    "eventLocation": "Convention Center, London",
+    "imageData": "https://example.com/images/viljandi-folk.jpg",
+    "eventSeason": "SUVI"
+  },
+  {
+    "eventId": 2,
+    "eventName": "Food & Wine Fair",
+    "eventDescription": "Experience gourmet food and exquisite wines, featuring our finest prosecco.",
+    "eventStartDate": "2024-08-16",
+    "eventEndDate": "2024-08-16",
+    "eventLocation": "Convention Center, London",
+    "imageData": "https://example.com/images/food-wine-fair.jpg",
+    "eventSeason": "SUVI"
+  },
+  {
+    "eventId": 3,
+    "eventName": "Local Market Day",
+    "eventDescription": "Visit our stall at the local market for a delightful prosecco tasting.",
+    "eventStartDate": "2024-09-11",
+    "eventEndDate": "2024-09-11",
+    "eventLocation": "Three Slippers, Dublin",
+    "imageData": "https://example.com/images/local-market.jpg",
+    "eventSeason": "SÜGIS"
+  }
+]
