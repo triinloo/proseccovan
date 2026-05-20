@@ -12,6 +12,7 @@ import proseccovan.backend.persistence.usercontact.UserContact;
 import proseccovan.backend.persistence.usercontact.UserContactRepository;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static proseccovan.backend.infrastructure.error.ErrorResponse.DATA_NOT_FOUND;
@@ -30,11 +31,13 @@ public class CustomerBookingsService {
         }
 
         UserContact userContact = userContactRepository.findByUser_Id(userId);
-        List<Booking> bookings = bookingRepository.findByUser_Id(userId);
+        List<Booking> bookings = bookingRepository.findBookingsBy(userId);
 
-        return bookings.stream()
-                .map(booking -> toBookingSummaryDto(booking, userContact))
-                .toList();
+        List<BookingSummaryDto> result = new ArrayList<>();
+        for (Booking booking : bookings) {
+            result.add(toBookingSummaryDto(booking, userContact));
+        }
+        return result;
     }
 
     private BookingSummaryDto toBookingSummaryDto(Booking booking, UserContact userContact) {

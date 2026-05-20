@@ -45,8 +45,8 @@ public class CustomerChangeBookingFormController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     @PatchMapping("/customer-bookings/{bookingId}")
-    public BookingResponseDto updateBooking(@PathVariable Integer bookingId,
+    public void updateBooking(@PathVariable Integer bookingId,
                                             @RequestBody BookingCreateRequestDto request) {
-        return customerChangeBookingFormService.updateBooking(bookingId, request);
+        customerChangeBookingFormService.updateBooking(bookingId, request);
     }
 }
