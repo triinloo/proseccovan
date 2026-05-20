@@ -1,0 +1,9 @@
+{
+  "eventId": 5,
+  "eventName": "Prosecco Talvefestival",
+  "eventStartDate": "2026-12-05",
+  "eventEndDate": "2026-12-07",
+  "eventLocation": "Tallinn, Eesti",
+  "eventDescription": "Iga-aastane Prosecco Talvefestival Tallinnas, kus saab nautida parimat valikut prosecco veine koos maitsva toidu ja lõbusa meelelahutusega.",
+  "imageData": "https://example.com/images/winter-festival.jpg"
+}

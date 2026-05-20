@@ -1,0 +1,9 @@
+{
+  "eventId": 0,
+  "eventName": "string",
+  "eventStartDate": "2000-01-01",
+  "eventEndDate": "2000-01-01",
+  "eventLocation": "string",
+  "eventDescription": "string",
+  "imageData": "string"
+}
