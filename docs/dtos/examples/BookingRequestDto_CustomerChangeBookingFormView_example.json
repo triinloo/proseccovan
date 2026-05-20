@@ -1,0 +1,12 @@
+{
+  "customerName": "Mari Mets",
+  "email": "mari.mets@gmail.com",
+  "phoneNumber": "+372 5123 4567",
+  "bookingDate": "2026-06-15",
+  "bookingType": "Sünnipäev",
+  "address": "Pärna 5, Tartu",
+  "latitude": "58.37940000",
+  "longitude": "26.72509000",
+  "packageType": "MINI",
+  "bookingInfo": "Soovime lisada küünlaid"
+}
