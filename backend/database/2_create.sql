@@ -1,6 +1,8 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
 -- Last modification date: 2026-05-14 09:20:19.966
 
+SET search_path TO proseccovan;
+
 -- tables
 -- Table: booking
 CREATE TABLE booking (
