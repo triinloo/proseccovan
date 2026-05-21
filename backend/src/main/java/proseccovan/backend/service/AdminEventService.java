@@ -15,28 +15,29 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static proseccovan.backend.infrastructure.error.ErrorResponse.DATA_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class AdminEventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final EventsService eventsService;
 
     public List<EventListResponseDto> getAdminEvents() {
-        return eventRepository.findAll().stream()
-                .map(this::toEventListResponseDto)
-                .toList();
+        return eventsService.getEvents("ALL");
     }
 
     public EventDetailResponseDto getEventById(Integer eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException("Sündmust ei leitud", 333));
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
         return toEventDetailResponseDto(event);
     }
 
     public EventDetailResponseDto createEvent(EventRequestDto dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("Kasutajat ei leitud", 333));
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
 
         Event event = new Event();
         event.setCreatedByUser(user);
@@ -53,7 +54,7 @@ public class AdminEventService {
 
     public EventDetailResponseDto updateEvent(Integer eventId, EventRequestDto dto) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException("Sündmust ei leitud", 333));
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
 
         event.setName(dto.getEventName());
         event.setLocation(dto.getEventLocation());
@@ -68,7 +69,7 @@ public class AdminEventService {
 
     public void deleteAdminEvent(Integer eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException("Sündmust ei leitud", 333));
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
         eventRepository.delete(event);
     }
 
@@ -82,27 +83,5 @@ public class AdminEventService {
         dto.setEventDescription(event.getDescription());
         dto.setImageData(event.getImageUrl());
         return dto;
-    }
-
-    private EventListResponseDto toEventListResponseDto(Event event) {
-        EventListResponseDto dto = new EventListResponseDto();
-        dto.setEventId(event.getId());
-        dto.setEventName(event.getName());
-        dto.setEventDescription(event.getDescription());
-        dto.setEventStartDate(event.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        dto.setEventEndDate(event.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        dto.setEventLocation(event.getLocation());
-        dto.setImageData(event.getImageUrl());
-        dto.setEventSeason(toSeason(event.getStartDate()));
-        return dto;
-    }
-
-    private String toSeason(LocalDate date) {
-        return switch (date.getMonthValue()) {
-            case 3, 4, 5 -> "KEVAD";
-            case 6, 7, 8 -> "SUVI";
-            case 9, 10, 11 -> "SÜGIS";
-            default -> "TALV";
-        };
     }
 }
