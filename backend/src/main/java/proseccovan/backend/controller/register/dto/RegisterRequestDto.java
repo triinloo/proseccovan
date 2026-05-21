@@ -1,4 +1,4 @@
-package proseccovan.backend.controller.register;
+package proseccovan.backend.controller.register.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
