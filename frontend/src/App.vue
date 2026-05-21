@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import { useAuthStore } from '@/auth/AuthService.js'
+import { AuthService } from '@/auth/AuthService.js'
 
 export default {
   name: 'App',
   setup() {
-    const authStore = useAuthStore()
+    const authStore = AuthService()
     return { authStore }
   },
   methods: {

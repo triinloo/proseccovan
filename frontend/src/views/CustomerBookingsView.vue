@@ -35,12 +35,12 @@
 
 <script>
 import BookingService from '@/api-services/BookingService.js'
-import { useAuthStore } from '@/auth/AuthService.js'
+import { AuthService } from '@/auth/AuthService.js'
 
 export default {
   name: 'CustomerBookingsView',
   setup() {
-    const authStore = useAuthStore()
+    const authStore = AuthService()
     return { authStore }
   },
   data() {
