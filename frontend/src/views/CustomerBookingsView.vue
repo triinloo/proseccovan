@@ -22,7 +22,7 @@
             <span v-else class="badge bg-secondary">Tühistatud</span>
           </td>
           <td>
-            <button v-if="booking.bookingStatus === 'OOTEL'" class="btn btn-sm btn-outline-secondary">Muuda</button>
+            <button v-if="booking.bookingStatus === 'OOTEL'" class="btn btn-sm btn-outline-secondary" @click="$router.push('/customer-booking/' + booking.bookingId)">Muuda</button>
           </td>
         </tr>
       </tbody>
