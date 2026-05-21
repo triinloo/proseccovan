@@ -18,7 +18,8 @@
           <td>{{ booking.bookingDate }}</td>
           <td>
             <span v-if="booking.bookingStatus === 'OOTEL'" class="badge bg-warning text-dark">Ootel</span>
-            <span v-else class="badge bg-success">Kinnitatud</span>
+            <span v-else-if="booking.bookingStatus === 'KINNITATUD'" class="badge bg-success">Kinnitatud</span>
+            <span v-else class="badge bg-secondary">Tühistatud</span>
           </td>
           <td>
             <button v-if="booking.bookingStatus === 'OOTEL'" class="btn btn-sm btn-outline-secondary">Muuda</button>
