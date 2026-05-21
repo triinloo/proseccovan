@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import proseccovan.backend.controller.events.dto.EventListResponseDto;
-import proseccovan.backend.service.EventsService;
+import proseccovan.backend.service.EventService;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventsController {
 
-    private final EventsService eventsService;
+    private final EventService eventService;
 
     @Operation(
             summary = "Sündmuste nimekiri. Tagastab eventId, eventName, eventDescription, eventStartDate, eventEndDate, eventLocation, imageData, eventSeason",
@@ -27,7 +27,7 @@ public class EventsController {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @GetMapping("/events")
-    public List<EventListResponseDto> getEvents(@RequestParam(defaultValue = "ALL") String season) {
-        return eventsService.getEvents(season);
+    public List<EventListResponseDto> getEvents(@RequestParam(defaultValue = "Kõik") String season) {
+        return eventService.getEvents(season);
     }
 }

@@ -20,16 +20,16 @@ import proseccovan.backend.controller.adminevent.dto.EventDetailResponseDto;
 import proseccovan.backend.controller.adminevent.dto.EventRequestDto;
 import proseccovan.backend.controller.events.dto.EventListResponseDto;
 import proseccovan.backend.infrastructure.error.ApiError;
-import proseccovan.backend.service.AdminEventService;
+import proseccovan.backend.service.EventService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-public class AdminEventController {
+public class EventController {
 
-    private final AdminEventService adminEventService;
+    private final EventService eventService;
 
     @Operation(
             summary = "Uue sündmuse loomine. Tagastab eventId, eventName, eventStartDate, eventEndDate, eventLocation, eventDescription, imageData",
@@ -43,7 +43,7 @@ public class AdminEventController {
     })
     @PostMapping("/events")
     public ResponseEntity<EventDetailResponseDto> createEvent(@RequestBody EventRequestDto eventRequestDto) {
-        EventDetailResponseDto response = adminEventService.createEvent(eventRequestDto);
+        EventDetailResponseDto response = eventService.createEvent(eventRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -59,7 +59,7 @@ public class AdminEventController {
     })
     @GetMapping("/events/{eventId}")
     public EventDetailResponseDto getEventById(@PathVariable Integer eventId) {
-        return adminEventService.getEventById(eventId);
+        return eventService.getEventById(eventId);
     }
 
     @Operation(
@@ -72,7 +72,7 @@ public class AdminEventController {
     })
     @GetMapping("/events")
     public List<EventListResponseDto> getAdminEvents() {
-        return adminEventService.getAdminEvents();
+        return eventService.getEvents("Kõik");
     }
 
     @Operation(
@@ -87,7 +87,7 @@ public class AdminEventController {
     })
     @PutMapping("/events/{eventId}")
     public EventDetailResponseDto updateEvent(@PathVariable Integer eventId, @RequestBody EventRequestDto eventRequestDto) {
-        return adminEventService.updateEvent(eventId, eventRequestDto);
+        return eventService.updateEvent(eventId, eventRequestDto);
     }
 
     @Operation(
@@ -102,7 +102,7 @@ public class AdminEventController {
     })
     @DeleteMapping("/events/{eventId}")
     public ResponseEntity<Void> deleteAdminEvent(@PathVariable Integer eventId) {
-        adminEventService.deleteAdminEvent(eventId);
+        eventService.deleteEvent(eventId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -19,14 +19,16 @@ import static proseccovan.backend.infrastructure.error.ErrorResponse.DATA_NOT_FO
 
 @Service
 @RequiredArgsConstructor
-public class AdminEventService {
+public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private final EventsService eventsService;
 
-    public List<EventListResponseDto> getAdminEvents() {
-        return eventsService.getEvents("Kõik");
+    public List<EventListResponseDto> getEvents(String season) {
+        return eventRepository.findAll().stream()
+                .filter(event -> season.equals("Kõik") ||toSeason(event.getStartDate()).equals(season))
+                .map(this::toEventListResponseDto)
+                .toList();
     }
 
     public EventDetailResponseDto getEventById(Integer eventId) {
@@ -48,8 +50,7 @@ public class AdminEventService {
         event.setDescription(dto.getEventDescription());
         event.setImageUrl(dto.getImageData());
 
-        Event saved = eventRepository.save(event);
-        return toEventDetailResponseDto(saved);
+        return toEventDetailResponseDto(eventRepository.save(event));
     }
 
     public EventDetailResponseDto updateEvent(Integer eventId, EventRequestDto dto) {
@@ -63,14 +64,26 @@ public class AdminEventService {
         event.setDescription(dto.getEventDescription());
         event.setImageUrl(dto.getImageData());
 
-        Event saved = eventRepository.save(event);
-        return toEventDetailResponseDto(saved);
+        return toEventDetailResponseDto(eventRepository.save(event));
     }
 
-    public void deleteAdminEvent(Integer eventId) {
+    public void deleteEvent(Integer eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
         eventRepository.delete(event);
+    }
+
+    private EventListResponseDto toEventListResponseDto(Event event) {
+        EventListResponseDto dto = new EventListResponseDto();
+        dto.setEventId(event.getId());
+        dto.setEventName(event.getName());
+        dto.setEventDescription(event.getDescription());
+        dto.setEventStartDate(event.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dto.setEventEndDate(event.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dto.setEventLocation(event.getLocation());
+        dto.setImageData(event.getImageUrl());
+        dto.setEventSeason(toSeason(event.getStartDate()));
+        return dto;
     }
 
     private EventDetailResponseDto toEventDetailResponseDto(Event event) {
@@ -83,5 +96,15 @@ public class AdminEventService {
         dto.setEventDescription(event.getDescription());
         dto.setImageData(event.getImageUrl());
         return dto;
+    }
+
+    private String toSeason(LocalDate date) {
+        return switch (date.getMonthValue()) {
+            case 3, 4, 5 -> "KEVAD";
+            case 6, 7, 8 -> "SUVI";
+            case 9, 10, 11 -> "SÜGIS";
+            case 1, 2, 12 -> "TALV";
+            default -> "Kõik";
+        };
     }
 }
