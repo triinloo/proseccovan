@@ -37,6 +37,15 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'),
     },
+    {
+      path: '/error',
+      name: 'error',
+      component: () => import('../views/ErrorView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error',
+    },
   ],
 })
 
