@@ -9,6 +9,7 @@ import proseccovan.backend.controller.booking.dto.BookingOverviewDto;
 import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
 import proseccovan.backend.persistence.booking.Booking;
+import proseccovan.backend.persistence.booking.BookingMapper;
 import proseccovan.backend.persistence.booking.BookingRepository;
 import proseccovan.backend.persistence.booking.BookingStatusMapper;
 import proseccovan.backend.persistence.bookingpackage.Package;
@@ -30,6 +31,7 @@ import static proseccovan.backend.infrastructure.error.ErrorResponse.*;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final BookingMapper bookingMapper;
     private final PackageRepository packageRepository;
     private final UserRepository userRepository;
     private final UserContactRepository userContactRepository;
@@ -55,23 +57,12 @@ public class BookingService {
         return result;
     }
 
+
     public BookingResponseDto getBookingById(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
-        return new BookingResponseDto(
-                userContact.getUserName(),
-                booking.getUser().getEmail(),
-                userContact.getPhone(),
-                booking.getEventDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                booking.getBookingTypeInfo(),
-                booking.getPackageField().getName(),
-                booking.getAddress(),
-                booking.getLatitude() != null ? booking.getLatitude().toPlainString() : null,
-                booking.getLongitude() != null ? booking.getLongitude().toPlainString() : null,
-                booking.getPackageField().getDescription(),
-                BookingStatusMapper.toBookingStatus(booking.getStatus())
-        );
+        return bookingMapper.toDto(booking, userContact);
     }
 
     public void createNewBooking(BookingCreateRequestDto request) {
