@@ -11,7 +11,7 @@
             v-model="customerName"
             type="text"
             class="form-control"
-            placeholder="Mari Maasikas"
+            placeholder="Sisesta oma nimi"
           />
         </div>
 
@@ -27,12 +27,22 @@
 
         <div class="mb-3 text-start">
           <label class="form-label">Parool</label>
-          <input v-model="password" type="password" class="form-control" />
+          <input
+            v-model="password"
+            type="password"
+            class="form-control"
+            placeholder="Sisesta parool"
+          />
         </div>
 
         <div class="mb-4 text-start">
           <label class="form-label">Korda parooli</label>
-          <input v-model="confirmPassword" type="password" class="form-control" />
+          <input
+            v-model="confirmPassword"
+            type="password"
+            class="form-control"
+            placeholder="Korda parooli"
+          />
         </div>
         <button @click="register" class="btn btn-dark d-block px-5">Registreeru</button>
       </div>
@@ -58,7 +68,12 @@ export default {
   },
   methods: {
     register() {
-      if (this.customerName === '' || this.email === '' || this.password === '' || this.confirmPassword === '') {
+      if (
+        this.customerName === '' ||
+        this.email === '' ||
+        this.password === '' ||
+        this.confirmPassword === ''
+      ) {
         this.errorMessage = 'Täida kõik väljad'
         return
       }

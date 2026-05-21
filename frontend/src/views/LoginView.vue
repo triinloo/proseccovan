@@ -40,7 +40,7 @@
 <script>
 import AlertError from '@/components/alerts/AlertError.vue'
 import LoginService from '@/api-services/LoginService.js'
-import { useAuthStore } from '@/auth/AuthService.js'
+import { AuthService } from '@/auth/AuthService.js'
 
 export default {
   name: 'LoginView',
@@ -55,9 +55,13 @@ export default {
   methods: {
     login() {
       this.errorMessage = ''
+      if (this.email === '' || this.password === '') {
+        this.errorMessage = 'Täida kõik väljad'
+        return
+      }
       LoginService.login(this.email, this.password)
         .then((response) => {
-          const authStore = useAuthStore()
+          const authStore = AuthService()
           authStore.setAuth(response.data.userId, response.data.roleName)
           this.$router.push('/')
         })
