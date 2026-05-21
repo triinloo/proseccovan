@@ -28,7 +28,7 @@ public class EventService {
 
     public List<EventListResponseDto> getEvents(String season) {
         return eventRepository.findAll().stream()
-                .filter(event -> season.equals("Kõik") ||toSeason(event.getStartDate()).equals(season))
+                .filter(event -> season.equals("Kõik") || toSeason(event.getStartDate()).equals(season))
                 .map(this::toEventListResponseDto)
                 .toList();
     }
@@ -42,30 +42,16 @@ public class EventService {
     public EventDetailResponseDto createEvent(EventRequestDto dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(this::notFound);
-
         Event event = new Event();
         event.setCreatedByUser(user);
-        event.setName(dto.getEventName());
-        event.setLocation(dto.getEventLocation());
-        event.setStartDate(LocalDate.parse(dto.getEventStartDate()));
-        event.setEndDate(LocalDate.parse(dto.getEventEndDate()));
-        event.setDescription(dto.getEventDescription());
-        event.setImageUrl(dto.getImageData());
-
+        applyFields(event, dto);
         return toEventDetailResponseDto(eventRepository.save(event));
     }
 
     public EventDetailResponseDto updateEvent(Integer eventId, EventRequestDto dto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(this::notFound);
-
-        event.setName(dto.getEventName());
-        event.setLocation(dto.getEventLocation());
-        event.setStartDate(LocalDate.parse(dto.getEventStartDate()));
-        event.setEndDate(LocalDate.parse(dto.getEventEndDate()));
-        event.setDescription(dto.getEventDescription());
-        event.setImageUrl(dto.getImageData());
-
+        applyFields(event, dto);
         return toEventDetailResponseDto(eventRepository.save(event));
     }
 
@@ -75,29 +61,38 @@ public class EventService {
         eventRepository.delete(event);
     }
 
+    private void applyFields(Event event, EventRequestDto dto) {
+        event.setName(dto.getEventName());
+        event.setLocation(dto.getEventLocation());
+        event.setStartDate(LocalDate.parse(dto.getEventStartDate()));
+        event.setEndDate(LocalDate.parse(dto.getEventEndDate()));
+        event.setDescription(dto.getEventDescription());
+        event.setImageUrl(dto.getImageData());
+    }
+
     private EventListResponseDto toEventListResponseDto(Event event) {
-        EventListResponseDto dto = new EventListResponseDto();
-        dto.setEventId(event.getId());
-        dto.setEventName(event.getName());
-        dto.setEventDescription(event.getDescription());
-        dto.setEventStartDate(event.getStartDate().format(DATE_FORMATTER));
-        dto.setEventEndDate(event.getEndDate().format(DATE_FORMATTER));
-        dto.setEventLocation(event.getLocation());
-        dto.setImageData(event.getImageUrl());
-        dto.setEventSeason(toSeason(event.getStartDate()));
-        return dto;
+        return new EventListResponseDto(
+                event.getId(),
+                event.getName(),
+                event.getDescription(),
+                event.getStartDate().format(DATE_FORMATTER),
+                event.getEndDate().format(DATE_FORMATTER),
+                event.getLocation(),
+                event.getImageUrl(),
+                toSeason(event.getStartDate())
+        );
     }
 
     private EventDetailResponseDto toEventDetailResponseDto(Event event) {
-        EventDetailResponseDto dto = new EventDetailResponseDto();
-        dto.setEventId(event.getId());
-        dto.setEventName(event.getName());
-        dto.setEventStartDate(event.getStartDate().format(DATE_FORMATTER));
-        dto.setEventEndDate(event.getEndDate().format(DATE_FORMATTER));
-        dto.setEventLocation(event.getLocation());
-        dto.setEventDescription(event.getDescription());
-        dto.setImageData(event.getImageUrl());
-        return dto;
+        return new EventDetailResponseDto(
+                event.getId(),
+                event.getName(),
+                event.getStartDate().format(DATE_FORMATTER),
+                event.getEndDate().format(DATE_FORMATTER),
+                event.getLocation(),
+                event.getDescription(),
+                event.getImageUrl()
+        );
     }
 
     private String toSeason(LocalDate date) {
