@@ -1,3 +1,5 @@
+SET search_path TO proseccovan;
+
 INSERT INTO role (id, name) VALUES (default, 'ADMIN');
 INSERT INTO role (id, name) VALUES (default, 'CUSTOMER');
 
