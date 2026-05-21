@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import proseccovan.backend.controller.booking.dto.BookingCreateRequestDto;
 import proseccovan.backend.controller.booking.dto.BookingResponseDto;
 import proseccovan.backend.controller.booking.dto.BookingOverviewDto;
+import proseccovan.backend.infrastructure.error.ErrorResponse;
 import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
 import proseccovan.backend.persistence.booking.Booking;
@@ -36,28 +37,32 @@ public class BookingService {
     private final UserRepository userRepository;
     private final UserContactRepository userContactRepository;
 
-    public List<BookingOverviewDto> getBookings(String status) {
-        List<Booking> bookings = bookingRepository.findBookingsBy(status);
-        List<BookingOverviewDto> result = new ArrayList<>();
-        for (Booking booking : bookings) {
-            result.add(toBookingSummaryDto(booking));
-        }
-        return result;
+
+
+    /**
+     * Loob uue broneeringu staatusega O (ootel).
+     * @throws ForbiddenException kui kasutajat ei leita (errorCode 333)
+     * @throws DataNotFoundException kui paketti ei leita (errorCode 333)
+     */
+    public void createNewBooking(BookingCreateRequestDto request) {
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ForbiddenException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+        Package foundPackage = packageRepository.findPackageByType(request.getPackageType())
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+        bookingRepository.save(Booking.builder()
+                .user(user)
+                .packageField(foundPackage)
+                .address(request.getAddress())
+                .eventDate(request.getBookingDate())
+                .bookingTypeInfo(request.getBookingInfo())
+                .status("O")
+                .build());
     }
 
-    public List<BookingOverviewDto> getBookingsByUserId(Integer userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode());
-        }
-        List<Booking> bookings = bookingRepository.findBookingsBy(userId);
-        List<BookingOverviewDto> result = new ArrayList<>();
-        for (Booking booking : bookings) {
-            result.add(toBookingSummaryDto(booking));
-        }
-        return result;
-    }
-
-
+    /**
+     * Tagastab ühe broneeringu täisinfo koos kasutaja kontaktandmetega.
+     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
+     */
     public BookingResponseDto getBookingById(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
@@ -65,22 +70,40 @@ public class BookingService {
         return bookingMapper.toDto(booking, userContact);
     }
 
-    public void createNewBooking(BookingCreateRequestDto request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ForbiddenException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
-        Package foundPackage = packageRepository.findPackageByType(request.getPackageType())
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
-        Booking booking = Booking.builder()
-                .user(user)
-                .packageField(foundPackage)
-                .address(request.getAddress())
-                .eventDate(request.getBookingDate())
-                .bookingTypeInfo(request.getBookingInfo())
-                .status("O")
-                .build();
-        bookingRepository.save(booking);
+    /**
+     * Tagastab kõik broneeringud filtreeritud staatuse järgi.
+     * Staatus võib olla O (ootel), K (kinnitatud) või T (tühistatud).
+     */
+    public List<BookingOverviewDto> getBookings(String status) {
+        List<Booking> bookings = bookingRepository.findBookingsBy(status);
+        List<BookingOverviewDto> result = new ArrayList<>();
+        for (Booking booking : bookings) {
+            result.add(toBookingOverviewDto(booking));
+        }
+        return result;
     }
 
+    /**
+     * Tagastab kõik broneeringud kasutaja ID järgi.
+     * @throws DataNotFoundException kui kasutajat ei leita (errorCode 333)
+     */
+    public List<BookingOverviewDto> getBookingsByUserId(Integer userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode());
+        }
+        List<Booking> bookings = bookingRepository.findBookingsBy(userId);
+        List<BookingOverviewDto> result = new ArrayList<>();
+        for (Booking booking : bookings) {
+            result.add(toBookingOverviewDto(booking));
+        }
+        return result;
+    }
+
+
+    /**
+     * Uuendab broneeringu andmeid (kuupäev, aadress, pakett, kontaktandmed).
+     * @throws DataNotFoundException kui broneeringut või paketti ei leita (errorCode 333)
+     */
     @Transactional
     public void updateBooking(Integer bookingId, BookingCreateRequestDto request) {
         Booking booking = bookingRepository.findById(bookingId)
@@ -94,33 +117,34 @@ public class BookingService {
         booking.setLatitude(request.getLatitude() != null ? new BigDecimal(request.getLatitude()) : null);
         booking.setLongitude(request.getLongitude() != null ? new BigDecimal(request.getLongitude()) : null);
         booking.setPackageField(bookingPackage);
-        bookingRepository.save(booking);
-
         booking.getUser().setEmail(request.getEmail());
         userContact.setPhone(request.getPhoneNumber());
-        userContactRepository.save(userContact);
     }
 
-    public void cancelBooking(Integer bookingId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
-        if (!booking.getStatus().equals("O")) {
-            throw new ForbiddenException(CANCELLATION_NOT_ALLOWED.getMessage(), CANCELLATION_NOT_ALLOWED.getErrorCode());
-        }
-        booking.setStatus("T");
-        bookingRepository.save(booking);
-    }
-
+    /**
+     * Kinnitab broneeringu, muutes staatuse O → K.
+     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
+     * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 555)
+     */
     public void confirmBooking(Integer bookingId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
-        if (!booking.getStatus().equals("O")) {
-            throw new ForbiddenException(CONFIRMATION_NOT_ALLOWED.getMessage(), CONFIRMATION_NOT_ALLOWED.getErrorCode());
-        }
-        booking.setStatus("K");
-        bookingRepository.save(booking);
+        changeBookingStatus(bookingId, "O", "K", CONFIRMATION_NOT_ALLOWED);
     }
 
+    /**
+     * Tühistab broneeringu kasutaja poolt, muutes staatuse O → T.
+     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
+     * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 444)
+     */
+    public void cancelBooking(Integer bookingId) {
+        changeBookingStatus(bookingId, "O", "T", CANCELLATION_NOT_ALLOWED);
+    }
+
+    /**
+     * Tühistab broneeringu admini poolt, muutes staatuse T.
+     * Lubatud kõigi staatuste puhul peale T (juba tühistatud).
+     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
+     * @throws ForbiddenException kui broneeringu staatus on juba T (errorCode 444)
+     */
     public void adminCancelBooking(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
@@ -131,7 +155,17 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    private BookingOverviewDto toBookingSummaryDto(Booking booking) {
+    private void changeBookingStatus(Integer bookingId, String requiredStatus, String newStatus, ErrorResponse error) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+        if (!booking.getStatus().equals(requiredStatus)) {
+            throw new ForbiddenException(error.getMessage(), error.getErrorCode());
+        }
+        booking.setStatus(newStatus);
+        bookingRepository.save(booking);
+    }
+
+    private BookingOverviewDto toBookingOverviewDto(Booking booking) {
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
         return new BookingOverviewDto(
                 String.format("B%04d", booking.getId()),

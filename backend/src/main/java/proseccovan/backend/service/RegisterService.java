@@ -4,7 +4,7 @@ package proseccovan.backend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import proseccovan.backend.controller.register.RegisterRequestDto;
+import proseccovan.backend.controller.register.dto.RegisterRequestDto;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
 import proseccovan.backend.infrastructure.exception.PrimaryKeyNotFoundException;
 import proseccovan.backend.persistence.role.Role;

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import proseccovan.backend.controller.register.dto.RegisterRequestDto;
 import proseccovan.backend.infrastructure.error.ApiError;
 import proseccovan.backend.service.RegisterService;
 
