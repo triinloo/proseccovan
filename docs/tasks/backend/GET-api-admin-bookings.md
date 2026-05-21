@@ -1,12 +1,12 @@
-# GET /api/admin/bookings
+# GET /api/admin-bookings
 
-**Kontroller:** `AdminBookingController.java`
+**Kontroller:** `AdminBookingsController.java`
 **Tüüp:** Backend
 **Staatus:** To Do
 
 ## Kontekst
 
-`AdminBookingsView.vue` on adminile mõeldud lehekülg (`/admin-bookings`), kus administraator näeb kõiki klientide broneeringuid. Iga rea juures on nupud „Vaata" (suunab `AdminBookingView.vue` detailvaatele), „Kinnita" ja „Tühista" (muudavad broneeringu staatust). Lehe staatusefilter (`Kõik / Ootel / Kinnitatud / Tühistatud`) toimib frontendis — backend tagastab alati kõik broneeringud. Endpoint on kaitstud — ainult admin-rolliga kasutajad saavad broneeringuid näha.
+Kõigi broneeringute nimekirja endpoint, mida kasutab `AdminBookingsView.vue` (URL: `/admin-bookings`). Admin näeb kõiki broneeringuid ja saab neid filtreerida staatuse järgi. "Vaata" nupp viib `AdminBookingView.vue` lehele. Samal lehel on ka `PUT /api/admin-bookings/{bookingId}/confirm` ja `PUT /api/admin-bookings/{bookingId}/cancel` endpointid.
 
 ## Mocki vaade
 
@@ -14,11 +14,17 @@
 
 ## API leping
 
-| Väli | Väärtus |
-|------|---------|
-| Meetod | `GET` |
-| Tee | `/api/admin/bookings` |
-| Auth | Jah (admin roll) |
+| Väli   | Väärtus                               |
+|--------|---------------------------------------|
+| Meetod | `GET`                                 |
+| Tee    | `/api/admin-bookings?status={STATUS}` |
+| Auth   | Ei                                    |
+
+**Query parameeter:**
+
+| Parameeter | Tüüp     | Kirjeldus                                                        |
+|------------|----------|------------------------------------------------------------------|
+| `status`   | `String` | Valikuline filter: `OOTEL`, `KINNITATUD` või `TÜHISTATUD`. Kui puudub, tagastatakse kõik broneeringud. |
 
 ### Request Body
 
@@ -29,47 +35,37 @@ Puudub — GET päring
 > Schema: [`BookingSummaryDto_schema.json`](../../dtos/schema/BookingSummaryDto_schema.json)
 > Näidis: [`BookingSummaryDto_AdminBookingsView_Array_example.json`](../../dtos/examples/BookingSummaryDto_AdminBookingsView_Array_example.json)
 
-Tagastatakse massiiv (`List<BookingSummaryDto>`).
+Tagastab **massiivi** `BookingSummaryDto` objektidest.
 
-| Väli | Tüüp | Allikas (DB tabel.veerg) |
-|------|------|--------------------------|
-| `bookingId` | `String` (nt `B0001`) | `booking.id` — formaadis `"B" + String.format("%04d", id)` |
-| `customerName` | `String` | `user_contact.user_name` (joined `booking.user_id → user_contact.user_id`) |
-| `bookingDate` | `String` (dd/MM/yyyy) | `booking.event_date` |
-| `bookingType` | `String` | `booking.booking_type_info` |
-| `location` | `String` | `booking.address` |
-| `packageType` | `String` (`MINI` \| `MIDI` \| `MAXI`) | `package.name` (joined `booking.package_id`) |
-| `bookingStatus` | `String` (`OOTEL` \| `KINNITATUD` \| `TÜHISTATUD`) | `booking.status` — teisendus: `O`→`OOTEL`, `K`→`KINNITATUD`, `T`→`TÜHISTATUD` |
+| Väli            | Tüüp     | Allikas (DB tabel.veerg)                               |
+|-----------------|----------|--------------------------------------------------------|
+| `bookingId`     | `String` | `booking.id` (formaadis "B0001")                       |
+| `customerName`  | `String` | `user_contact.user_name`                               |
+| `bookingDate`   | `String` | `booking.event_date` (formaadis yyyy-MM-dd)            |
+| `bookingType`   | `String` | `booking.booking_type_info`                            |
+| `location`      | `String` | `booking.address`                                      |
+| `packageType`   | `String` | `package.name` (MINI / MIDI / MAXI)                    |
+| `bookingStatus` | `String` | `booking.status` (O=OOTEL, K=KINNITATUD, T=TÜHISTATUD) |
+
+> **Märkus:** `BookingSummaryDto` väljad klapivad täpselt olemasoleva `BookingSummaryDto`-ga. Kaalumisel, kas luua uus klass või taaskasutada `BookingSummaryDto`.
 
 ## Veahaldus
 
-| Olukord | Exception klass | ErrorResponse enum | HTTP staatus |
-|---------|----------------|-------------------|--------------|
-| Broneeringuid ei leitud (tühi tulemus) | — | — | 200 (tühi massiiv `[]`) |
-| Autentimata kasutaja üritab ligi pääseda | — | — | 401 (Spring Security filter) |
-
-> **Märkus veahalduse kohta:**
-> Kontrolli, kas vajalikud `ErrorResponse` enum kirjed ja exception klassid juba eksisteerivad:
-> - `backend/src/main/java/proseccovan/backend/infrastructure/error/ErrorResponse.java`
-> - `backend/src/main/java/proseccovan/backend/infrastructure/exception/`
->
-> Autentimise viga (401) käsitleb Spring Security filter chain, mitte kontroller ise. Tühi tulemus tagastab HTTP 200 koos tühja massiiviga — viga ei visata.
+Veaolukordi ei ole — tühi nimekiri `[]` kui broneeringuid ei leidu.
 
 ## Andmebaas
 
-Seotud tabelid: `booking`, `user_contact`, `package`
+Seotud tabelid: `booking`, `package`, `user_contact`
 
-Loetakse kõik read `booking` tabelist. Kliendi nime saamiseks joinitakse `user_contact` tabeliga (`booking.user_id = user_contact.user_id`). Paketi nime saamiseks joinitakse `package` tabeliga (`booking.package_id = package.id`). `bookingId` formaadiks teisendatakse `booking.id` kujule `B0001` (4-kohaline, nullidega täidetud). `bookingStatus` saadakse `booking.status` char-välja teisendamisel: `O`→`OOTEL`, `K`→`KINNITATUD`, `T`→`TÜHISTATUD`. `bookingDate` formaadiks teisendatakse `booking.event_date` kujule `dd/MM/yyyy`.
+Kui `status` parameeter on antud, filtreeritakse `booking.status` järgi (OOTEL=O, KINNITATUD=K, TÜHISTATUD=T). Kliendi nimi loetakse `user_contact` tabelist. Paketi nimi loetakse `package` tabelist. `booking.id` kuvatakse formaadis "B0001".
 
 ## Vastuvõtu kriteeriumid
 
-- [ ] `GET /api/admin/bookings` tagastab HTTP 200 ja kõigi broneeringute massiivi
-- [ ] Tühja tulemuse korral tagastatakse HTTP 200 koos tühja massiiviga `[]`
-- [ ] `bookingId` on formaadis `B0001` (4-kohaline, nullidega täidetud)
-- [ ] `bookingStatus` on teisendatud: `O`→`OOTEL`, `K`→`KINNITATUD`, `T`→`TÜHISTATUD`
-- [ ] `customerName` pärineb `user_contact.user_name` väljalt
-- [ ] `packageType` pärineb `package.name` väljalt
-- [ ] Autentimata päring tagastab HTTP 401 (Spring Security)
+- [ ] `GET /api/admin-bookings` tagastab HTTP 200 ja kõik broneeringud
+- [ ] `GET /api/admin-bookings?status=OOTEL` tagastab ainult OOTEL staatusega broneeringud
+- [ ] Kui broneeringuid ei leidu, tagastatakse tühi massiiv `[]`
+- [ ] `bookingId` on formaadis "B0001"
+- [ ] `bookingStatus` on loetav tekst (OOTEL / KINNITATUD / TÜHISTATUD)
 - [ ] Kõik DTO klassid on loodud Java klassidena õigesse paketti
 - [ ] Controller, Service, Repository kihid on eraldatud
 - [ ] Kontrolleri meetodil on `@Operation` ja `@ApiResponses` annotatsioonid (sh veavastused `ApiError` skeemiga)

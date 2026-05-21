@@ -1,6 +1,5 @@
-package proseccovan.backend.controller.bookingform.dto;
+package proseccovan.backend.controller.booking.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

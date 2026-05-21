@@ -1,16 +1,16 @@
 # GET /api/customer-bookings/{bookingId}
 
-**Kontroller:** `CustomerBookingController.java`
+**Kontroller:** `CustomerChangeBookingFormController.java`
 **Tüüp:** Backend
 **Staatus:** To Do
 
 ## Kontekst
 
-Ühe broneeringu detailvaate endpoint, mida kasutab `CustomerBookingView.vue` (URL: `/customer-booking`). Klient näeb broneeringu kõiki andmeid — kontaktinfo, sündmuse aeg, tüüp, pakett, asukoht kaardil ja staatus. "Vaata kaardil" nupp kasutab latitude/longitude koordinaate. "Sulge" nupp viib tagasi `CustomerBookingsView.vue` lehele. Samal lehel on ka `DELETE /api/customer-bookings/{bookingId}` tühistamise endpoint.
+Broneeringu muutmisvormi eeltäitmise endpoint, mida kasutab `CustomerChangeBookingFormView.vue` (URL: `/customer-change-booking-form`). Lehe avamisel laaditakse olemasoleva broneeringu andmed vormi väljadele. Ees- ja perekonnanimi ning sündmuse tüüp on vormil kirjutuskaitstud. Samal lehel on ka `PATCH /api/customer-bookings/{bookingId}` muutmise salvestamise endpoint.
 
 ## Mocki vaade
 
-![CustomerBookingView mock](../../png/CustomerBookingView.vue.png)
+![CustomerChangeBookingFormView mock](../../png/CustomerChangeBookingFormView.vue.png)
 
 ## API leping
 
@@ -27,26 +27,26 @@ Puudub — GET päring
 ### Response Body — `BookingResponseDto.java`
 
 > Schema: [`BookingResponseDto_schema.json`](../../dtos/schema/BookingResponseDto_schema.json)
-> Näidis: [`BookingResponseDto_CustomerBookingView_example.json`](../../dtos/examples/BookingResponseDto_CustomerBookingView_example.json)
+> Näidis: [`BookingRequestDto_CustomerChangeBookingFormView_example.json`](../../dtos/examples/BookingRequestDto_CustomerChangeBookingFormView_example.json)
 
-| Väli                | Tüüp     | Allikas (DB tabel.veerg)                               |
-|---------------------|----------|--------------------------------------------------------|
-| `customerName`      | `String` | `user_contact.user_name`                               |
-| `email`             | `String` | `user.email`                                           |
-| `phoneNumber`       | `String` | `user_contact.phone`                                   |
-| `bookingDate`       | `String` | `booking.event_date` (formaadis dd/MM/yyyy)            |
-| `bookingType`       | `String` | `booking.booking_type_info`                            |
-| `bookingPackageType`| `String` | `package.name` (MINI / MIDI / MAXI)                    |
-| `bookingAddress`    | `String` | `booking.address`                                      |
-| `latitude`          | `String` | `booking.latitude`                                     |
-| `longitude`         | `String` | `booking.longitude`                                    |
-| `info`              | `String` | `package.description`                                  |
-| `bookingStatus`     | `String` | `booking.status` (O=OOTEL, K=KINNITATUD, T=TÜHISTATUD) |
+| Väli            | Tüüp     | Allikas (DB tabel.veerg)                               |
+|-----------------|----------|--------------------------------------------------------|
+| `customerName`  | `String` | `user_contact.user_name`                               |
+| `email`         | `String` | `user.email`                                           |
+| `phoneNumber`   | `String` | `user_contact.phone`                                   |
+| `bookingDate`   | `String` | `booking.event_date` (formaadis dd/MM/yyyy)            |
+| `bookingType`   | `String` | `booking.booking_type_info`                            |
+| `packageType`   | `String` | `package.name` (MINI / MIDI / MAXI)                    |
+| `address`       | `String` | `booking.address`                                      |
+| `latitude`      | `String` | `booking.latitude`                                     |
+| `longitude`     | `String` | `booking.longitude`                                    |
+| `bookingInfo`   | `String` | `package.description`                                  |
+| `bookingStatus` | `String` | `booking.status` (O=OOTEL, K=KINNITATUD, T=TÜHISTATUD) |
 
 ## Veahaldus
 
-| Olukord               | Exception klass         | ErrorResponse enum | HTTP staatus |
-|-----------------------|-------------------------|--------------------|--------------|
+| Olukord                | Exception klass         | ErrorResponse enum | HTTP staatus |
+|------------------------|-------------------------|--------------------|--------------|
 | Broneeringut ei leitud | `DataNotFoundException` | `DATA_NOT_FOUND`   | 404          |
 
 > **Märkus veahalduse kohta:**
@@ -60,7 +60,7 @@ Puudub — GET päring
 
 Seotud tabelid: `booking`, `package`, `user`, `user_contact`
 
-Loetakse `booking` tabelist rida `bookingId` järgi. Kasutaja andmed loetakse `user` tabelist (`booking.user_id → user.id`) ja kontaktinfo `user_contact` tabelist (`user_contact.user_id = user.id`). Paketi nimi ja kirjeldus loetakse `package` tabelist (`booking.package_id → package.id`). `booking.status` char teisendatakse tekstiks (O→OOTEL, K→KINNITATUD, T→TÜHISTATUD). `booking.event_date` formaadis dd/MM/yyyy.
+Loetakse `booking` tabelist rida `bookingId` järgi. Kasutaja andmed loetakse `user` ja `user_contact` tabelitest. Paketi nimi ja kirjeldus loetakse `package` tabelist (`booking.package_id → package.id`). `booking.status` char teisendatakse tekstiks (O→OOTEL, K→KINNITATUD, T→TÜHISTATUD). `booking.event_date` formaadis dd/MM/yyyy.
 
 ## Vastuvõtu kriteeriumid
 

@@ -1,23 +1,22 @@
-package proseccovan.backend.controller.customerbooking.dto;
+package proseccovan.backend.controller.booking.dto;
 
-import lombok.*;
-
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class BookingResponseDto {
     private String customerName;
     private String email;
     private String phoneNumber;
     private String bookingDate;
     private String bookingType;
-    private String bookingPackageType;
-    private String bookingAddress;
+    private String packageType;
+    private String address;
     private String latitude;
     private String longitude;
-    private String info;
+    private String bookingInfo;
     private String bookingStatus;
 }
