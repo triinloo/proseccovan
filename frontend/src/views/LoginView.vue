@@ -1,32 +1,36 @@
 <template>
   <div class="container text-center">
     <div class="row justify-content-center">
-      <div class="col-3">
-        <h4 class="mb-5">Logi sisse / registreeri</h4>
+      <div class="col-4">
+        <h4 class="mb-4">Logi sisse / registreeri</h4>
         <AlertError :error-message="errorMessage" />
-        <div class="form-floating mb-3">
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            class="form-control"
-            placeholder=" "
-          />
-          <label for="email">E-post</label>
-        </div>
-        <div class="form-floating mb-3">
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            class="form-control"
-            placeholder=" "
-          />
-          <label for="password">Parool</label>
-        </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-dark w-100" @click="login">Logi sisse</button>
-          <button class="btn btn-outline-secondary w-100" @click="$router.push('/register')">Pole kontot? Registreeri</button>
+        <div class="card">
+          <div class="card-body p-4 text-start">
+            <div class="mb-4">
+              <label for="email" class="form-label">E-mail</label>
+              <input
+                id="email"
+                v-model="email"
+                type="email"
+                :class="['form-control', { 'is-invalid': errorMessage }]"
+                placeholder="Sisesta e-mail"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="password" class="form-label">Parool</label>
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                :class="['form-control', { 'is-invalid': errorMessage }]"
+                placeholder="Sisesta parool"
+              />
+            </div>
+            <div class="d-flex gap-2 mt-4">
+              <button class="btn btn-dark w-100" @click="login">Sisene</button>
+              <button class="btn btn-outline-dark w-100" @click="$router.push('/register')">Pole kontot? Registreeri</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -64,3 +68,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.form-control.is-invalid {
+  background-image: none;
+}
+</style>
