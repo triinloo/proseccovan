@@ -58,6 +58,14 @@ export default {
   },
   methods: {
     register() {
+      if (this.customerName === '' || this.email === '' || this.password === '' || this.confirmPassword === '') {
+        this.errorMessage = 'Täida kõik väljad'
+        return
+      }
+      if (this.password !== this.confirmPassword) {
+        this.errorMessage = 'Paroolid ei kattu'
+        return
+      }
       RegisterService.register(this.customerName, this.email, this.password)
         .then(() => {
           this.$router.push('/login')
