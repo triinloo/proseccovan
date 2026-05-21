@@ -20,13 +20,13 @@ public class EventsController {
 
     private final EventService eventService;
 
+    @GetMapping("/events")
     @Operation(
             summary = "Sündmuste nimekiri. Tagastab eventId, eventName, eventDescription, eventStartDate, eventEndDate, eventLocation, imageData, eventSeason",
             description = "Tagastab avalikud sündmused. Parameetriga season={ALL|KEVAD|SUVI|SÜGIS|TALV} saab filtreerida toimumisaja järgi. Sesoon arvutatakse start_date kuu põhjal. Autentimist ei nõuta.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    @GetMapping("/events")
     public List<EventListResponseDto> getEvents(@RequestParam(defaultValue = "Kõik") String season) {
         return eventService.getEvents(season);
     }

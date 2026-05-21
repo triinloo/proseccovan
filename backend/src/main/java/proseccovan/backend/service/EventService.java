@@ -21,6 +21,8 @@ import static proseccovan.backend.infrastructure.error.ErrorResponse.DATA_NOT_FO
 @RequiredArgsConstructor
 public class EventService {
 
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
@@ -33,13 +35,13 @@ public class EventService {
 
     public EventDetailResponseDto getEventById(Integer eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         return toEventDetailResponseDto(event);
     }
 
     public EventDetailResponseDto createEvent(EventRequestDto dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
 
         Event event = new Event();
         event.setCreatedByUser(user);
@@ -55,7 +57,7 @@ public class EventService {
 
     public EventDetailResponseDto updateEvent(Integer eventId, EventRequestDto dto) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
 
         event.setName(dto.getEventName());
         event.setLocation(dto.getEventLocation());
@@ -69,7 +71,7 @@ public class EventService {
 
     public void deleteEvent(Integer eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         eventRepository.delete(event);
     }
 
@@ -78,8 +80,8 @@ public class EventService {
         dto.setEventId(event.getId());
         dto.setEventName(event.getName());
         dto.setEventDescription(event.getDescription());
-        dto.setEventStartDate(event.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        dto.setEventEndDate(event.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dto.setEventStartDate(event.getStartDate().format(DATE_FORMATTER));
+        dto.setEventEndDate(event.getEndDate().format(DATE_FORMATTER));
         dto.setEventLocation(event.getLocation());
         dto.setImageData(event.getImageUrl());
         dto.setEventSeason(toSeason(event.getStartDate()));
@@ -90,8 +92,8 @@ public class EventService {
         EventDetailResponseDto dto = new EventDetailResponseDto();
         dto.setEventId(event.getId());
         dto.setEventName(event.getName());
-        dto.setEventStartDate(event.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        dto.setEventEndDate(event.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dto.setEventStartDate(event.getStartDate().format(DATE_FORMATTER));
+        dto.setEventEndDate(event.getEndDate().format(DATE_FORMATTER));
         dto.setEventLocation(event.getLocation());
         dto.setEventDescription(event.getDescription());
         dto.setImageData(event.getImageUrl());
@@ -106,5 +108,9 @@ public class EventService {
             case 1, 2, 12 -> "TALV";
             default -> "Kõik";
         };
+    }
+
+    private DataNotFoundException notFound() {
+        return new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode());
     }
 }
