@@ -15,18 +15,30 @@
         <RouterLink class="nav-link" to="/events">Sündmused</RouterLink>
       </div>
       <div>
-        <RouterLink class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
+        <RouterLink v-if="!authStore.userId" class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
+        <button v-else class="btn btn-outline-dark" @click="logout">Logi välja</button>
       </div>
     </div>
   </nav>
-
 
   <RouterView />
 </template>
 
 <script>
+import { useAuthStore } from '@/auth/AuthService.js'
+
 export default {
   name: 'App',
+  setup() {
+    const authStore = useAuthStore()
+    return { authStore }
+  },
+  methods: {
+    logout() {
+      this.authStore.clearAuth()
+      this.$router.push('/login')
+    },
+  },
 }
 </script>
 
