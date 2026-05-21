@@ -20,7 +20,7 @@ public class EventsService {
         List<Event> events = eventRepository.findAll();
 
         return events.stream()
-                .filter(event -> season.equals("ALL") || toSeason(event.getStartDate()).equals(season))
+                .filter(event -> season.equals("Kõik") || toSeason(event.getStartDate()).equals(season))
                 .map(this::toEventListResponseDto)
                 .toList();
     }
@@ -43,7 +43,8 @@ public class EventsService {
             case 3, 4, 5 -> "KEVAD";
             case 6, 7, 8 -> "SUVI";
             case 9, 10, 11 -> "SÜGIS";
-            default -> "TALV";
+            case 1, 2, 12 -> "TALV";
+            default -> "Kõik";
         };
     }
 }

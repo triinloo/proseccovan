@@ -2,13 +2,13 @@
   <div class="container text-center">
     <div class="row justify-content-center">
       <div class="col-8">
-        <h4 class="mb-2 text-start">Broneeri Prosecco Van oma sündmusele</h4>
-        <p class="mb-4 text-start text-muted">Palun täida allolev vorm ja me võtame sinuga peatselt ühendust.</p>
+        <h4 class="mb-4">Broneeri Prosecco Van oma sündmusele</h4>
         <AlertError :error-message="errorMessage" />
         <div class="card">
           <div class="card-body p-4 text-start">
+            <p class="mb-3 text-start text-muted">Palun täida allolev vorm ja me võtame sinuga peatselt ühendust.</p>
             <div class="row">
-              <div class="col-7">
+              <div class="col-6">
                 <div class="mb-3">
                   <label for="customerName" class="form-label">Ees- ja perekonnanimi</label>
                   <input
@@ -17,26 +17,6 @@
                     type="text"
                     class="form-control"
                     placeholder="Sisesta nimi"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="phoneNumber" class="form-label">Telefoni number</label>
-                  <input
-                    id="phoneNumber"
-                    v-model="phoneNumber"
-                    type="tel"
-                    class="form-control"
-                    placeholder="Sisesta telefoninumber"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="bookingType" class="form-label">Sündmuse tüüp</label>
-                  <input
-                    id="bookingType"
-                    v-model="bookingType"
-                    type="text"
-                    class="form-control"
-                    placeholder="nt. sünnipäev, pulm"
                   />
                 </div>
                 <div class="mb-3">
@@ -50,22 +30,22 @@
                   />
                 </div>
                 <div class="mb-3">
+                  <label for="phoneNumber" class="form-label">Telefoni number</label>
+                  <input
+                    id="phoneNumber"
+                    v-model="phoneNumber"
+                    type="tel"
+                    class="form-control"
+                    placeholder="Sisesta telefoninumber"
+                  />
+                </div>
+                <div class="mb-3">
                   <label for="bookingDate" class="form-label">Sündmuse aeg</label>
                   <input
                     id="bookingDate"
                     v-model="bookingDate"
                     type="date"
                     class="form-control"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="address" class="form-label">Aadress</label>
-                  <input
-                    id="address"
-                    v-model="address"
-                    type="text"
-                    class="form-control"
-                    placeholder="Sisesta aadress"
                   />
                 </div>
                 <div class="mb-3">
@@ -79,17 +59,39 @@
                   />
                 </div>
               </div>
-              <div class="col-5">
-                <label class="form-label">Vali pakett</label>
-                <div v-for="pkg in packages" :key="pkg.value" class="form-check mb-2">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="bookingType" class="form-label">Sündmuse tüüp</label>
                   <input
-                    :id="pkg.value"
-                    v-model="packageType"
-                    type="radio"
-                    :value="pkg.value"
-                    class="form-check-input"
+                    id="bookingType"
+                    v-model="bookingType"
+                    type="text"
+                    class="form-control"
+                    placeholder="nt. sünnipäev, pulm"
                   />
-                  <label :for="pkg.value" class="form-check-label">{{ pkg.label }}</label>
+                </div>
+                <div class="mb-3">
+                  <label for="address" class="form-label">Aadress</label>
+                  <input
+                    id="address"
+                    v-model="address"
+                    type="text"
+                    class="form-control"
+                    placeholder="Sisesta aadress"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Vali pakett</label>
+                  <div v-for="pkg in packages" :key="pkg.value" class="form-check mb-2">
+                    <input
+                      :id="pkg.value"
+                      v-model="packageType"
+                      type="radio"
+                      :value="pkg.value"
+                      class="form-check-input"
+                    />
+                    <label :for="pkg.value" class="form-check-label">{{ pkg.label }}</label>
+                  </div>
                 </div>
               </div>
             </div>

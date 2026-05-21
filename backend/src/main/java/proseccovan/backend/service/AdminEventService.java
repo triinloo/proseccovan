@@ -26,7 +26,7 @@ public class AdminEventService {
     private final EventsService eventsService;
 
     public List<EventListResponseDto> getAdminEvents() {
-        return eventsService.getEvents("ALL");
+        return eventsService.getEvents("Kõik");
     }
 
     public EventDetailResponseDto getEventById(Integer eventId) {
