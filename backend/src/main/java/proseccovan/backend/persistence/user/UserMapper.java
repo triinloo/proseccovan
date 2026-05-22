@@ -7,7 +7,7 @@ import proseccovan.backend.controller.login.dto.LoginResponseDto;
 public interface UserMapper {
 
     @Mapping(source = "id", target = "userId")
-    @Mapping(source = "role.name", target = "role")
+    @Mapping(source = "role.name", target = "roleName")
     LoginResponseDto toLoginResponseDto(User user);
 
 

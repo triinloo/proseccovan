@@ -27,6 +27,11 @@ const router = createRouter({
       name: 'customer-booking',
       component: CustomerBookingView
     },
+    {
+      path: '/admin-bookings',
+      name: 'admin-bookings',
+      component: () => import('../views/AdminBookingsView.vue'),
+    },
 
     {
       path: '/booking-form',
