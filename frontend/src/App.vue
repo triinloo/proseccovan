@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navMenu">
       <div class="navbar-nav mx-auto">
         <RouterLink class="nav-link" to="/booking-form">Broneeri</RouterLink>
-        <RouterLink class="nav-link" to="/events">Sündmused</RouterLink>
+        <RouterLink class="nav-link" :to="authStore.role === 'ADMIN' ? '/admin-events' : '/events'">Sündmused</RouterLink>
       </div>
       <div class="d-flex align-items-center gap-2">
         <RouterLink v-if="!authStore.userId" class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
