@@ -2,17 +2,15 @@
   <div class="container py-4">
     <h4 class="text-center mb-4">Sündmused</h4>
 
-    <div class="d-flex justify-content-center mb-4">
-      <div>
-        <label class="form-label small">Toimumise aeg</label>
-        <select class="form-select" v-model="selectedSeason" @change="fetchEvents">
-          <option value="Kõik">Kõik</option>
-          <option value="SUVI">Suvi</option>
-          <option value="SÜGIS">Sügis</option>
-          <option value="KEVAD">Kevad</option>
-          <option value="TALV">Talv</option>
-        </select>
-      </div>
+    <div class="mb-4">
+      <label class="form-label small">Toimumise aeg</label>
+      <select class="form-select w-auto" v-model="selectedSeason" @change="fetchEvents">
+        <option value="Kõik">Kõik</option>
+        <option value="SUVI">Suvi</option>
+        <option value="SÜGIS">Sügis</option>
+        <option value="KEVAD">Kevad</option>
+        <option value="TALV">Talv</option>
+      </select>
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
