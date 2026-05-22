@@ -28,17 +28,19 @@
           <div v-else class="bg-light d-flex align-items-center justify-content-center" style="height: 200px">
             <ph-image :size="48" color="#aaa" />
           </div>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h6 class="card-title fw-bold">{{ event.eventName }}</h6>
             <p class="card-text text-muted small">{{ event.eventDescription }}</p>
-            <p class="mb-1 small">
-              <ph-calendar-blank :size="16" class="me-1" />
-              {{ event.eventStartDate }}
-            </p>
-            <p class="mb-0 small">
-              <ph-map-pin :size="16" class="me-1" />
-              {{ event.eventLocation }}
-            </p>
+            <div class="mt-auto">
+              <p class="mb-1 small">
+                <ph-calendar-blank :size="16" class="me-1" />
+                {{ event.eventStartDate }}
+              </p>
+              <p class="mb-0 small">
+                <ph-map-pin :size="16" class="me-1" />
+                {{ event.eventLocation }}
+              </p>
+            </div>
           </div>
         </div>
       </div>

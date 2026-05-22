@@ -64,8 +64,8 @@
             </div>
 
             <div class="d-flex justify-content-center gap-2">
-              <button v-if="!eventId" class="btn btn-warning" @click="submitCreate">Lisa sündmus</button>
-              <button v-else class="btn btn-warning" @click="submitUpdate">Muuda</button>
+              <button v-if="!eventId" class="btn btn-dark" @click="submitCreate">Lisa sündmus</button>
+              <button v-else class="btn btn-dark" @click="submitUpdate">Muuda</button>
             </div>
 
           </div>

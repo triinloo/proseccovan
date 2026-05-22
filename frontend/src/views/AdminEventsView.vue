@@ -2,7 +2,7 @@
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4 class="mb-0">Sündmused</h4>
-      <RouterLink to="/admin-event-form" class="btn btn-warning d-flex align-items-center gap-1">
+      <RouterLink to="/admin-event-form" class="btn btn-dark d-flex align-items-center gap-1">
         Lisa uus sündmus <PhPlus :size="18" />
       </RouterLink>
     </div>
@@ -23,23 +23,27 @@
           <div v-else class="bg-light d-flex align-items-center justify-content-center" style="height: 200px">
             <PhImage :size="48" color="#aaa" />
           </div>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h6 class="card-title fw-bold">{{ event.eventName }}</h6>
             <p class="card-text text-muted small">{{ event.eventDescription }}</p>
-            <p class="mb-1 small">
-              <PhCalendarBlank :size="16" class="me-1" />{{ event.eventStartDate }}
-            </p>
-            <p class="mb-0 small">
-              <PhMapPin :size="16" class="me-1" />{{ event.eventLocation }}
-            </p>
-          </div>
-          <div class="card-footer bg-white border-top-0 d-flex gap-2 justify-content-end">
-            <RouterLink :to="`/admin-event-form/${event.eventId}`" class="btn btn-sm btn-outline-secondary">
-              <PhPencilSimple :size="16" />
-            </RouterLink>
-            <button class="btn btn-sm btn-outline-danger" @click="deleteEvent(event.eventId)">
-              <PhTrash :size="16" />
-            </button>
+            <div class="mt-auto d-flex justify-content-between align-items-end">
+              <div>
+                <p class="mb-1 small">
+                  <PhCalendarBlank :size="16" class="me-1" />{{ event.eventStartDate }}
+                </p>
+                <p class="mb-0 small">
+                  <PhMapPin :size="16" class="me-1" />{{ event.eventLocation }}
+                </p>
+              </div>
+              <div class="d-flex gap-3">
+                <RouterLink :to="`/admin-event-form/${event.eventId}`" class="btn btn-sm btn-outline-secondary">
+                  <PhPencilSimple :size="16" />
+                </RouterLink>
+                <button class="btn btn-sm btn-outline-danger" @click="deleteEvent(event.eventId)">
+                  <PhTrash :size="16" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
