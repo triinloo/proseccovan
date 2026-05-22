@@ -31,7 +31,7 @@ public class BookingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")})
 
-    public List<BookingOverviewDto> getBookings(@RequestParam String status) {
+    public List<BookingOverviewDto> getBookings(@RequestParam(required = false) String status) {
         return bookingService.getBookings(status);
     }
 
