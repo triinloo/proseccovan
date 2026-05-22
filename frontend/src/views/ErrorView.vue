@@ -1,35 +1,29 @@
 <script>
+import AlertError from '@/components/alerts/AlertError.vue'
+
 export default {
   name: 'ErrorView',
+  components: { AlertError },
 }
 </script>
 
 <template>
-  <div class="d-flex flex-column align-items-center pt-5">
-    <div class="error-banner rounded px-5 py-4 mb-5">
-      <h1 class="mb-0">Ups! Midagi läks valesti</h1>
-    </div>
+  <div class="d-flex flex-column align-items-center pt-3">
+    <AlertError error-message="Ups! Midagi läks valesti" />
 
-    <div class="glass-wrapper">
+    <div class="glass-wrapper mt-4">
       <img src="@/assets/Broken.png" alt="Katki klaas" class="broken-glass" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.error-banner {
-  background-color: #d4888a;
-  color: #2c1f1f;
-  width: 60%;
-  text-align: center;
-}
-
 .glass-wrapper {
   display: flex;
   justify-content: center;
 }
 
 .broken-glass {
-  width: 220px;
+  width: 150px;
 }
 </style>

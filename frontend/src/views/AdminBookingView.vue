@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h4 class="text-center mb-4">Broneering (admin)</h4>
+    <h4 class="text-center mb-4">Broneering</h4>
     <AlertError :error-message="errorMessage" />
     <div class="card p-4">
 
