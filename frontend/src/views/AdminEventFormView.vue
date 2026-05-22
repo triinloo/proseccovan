@@ -161,7 +161,7 @@ export default {
       if (!this.eventId) return
       AdminEventService.updateEvent(this.eventId, this.buildPayload())
         .then(() => {
-          this.$router.push('/events')
+          this.$router.push('/admin-events')
         })
         .catch((error) => {
           this.errorMessage = error.response?.data?.message ?? 'Sündmuse uuendamine ebaõnnestus'
