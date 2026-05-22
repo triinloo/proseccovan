@@ -8,7 +8,7 @@
         <h5>Toome parima prosecco otse sinu üritusele.</h5>
         <h5>Ideaalne pulmadeks, pidudeks ja firmaüritusteks.</h5>
         <p></p>
-        <RouterLink to="/booking-form" class="btn btn-dark mt-3">Broneeri</RouterLink>
+        <RouterLink to="/login" class="btn btn-dark mt-3">Broneeri</RouterLink>
       </div>
     </div>
   </main>
