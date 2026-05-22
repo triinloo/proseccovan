@@ -63,7 +63,7 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-center gap-2">
+            <div class="d-flex justify-content-start gap-2">
               <button v-if="!eventId" class="btn btn-dark" @click="submitCreate">Lisa sündmus</button>
               <button v-else class="btn btn-dark" @click="submitUpdate">Muuda</button>
             </div>

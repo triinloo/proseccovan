@@ -1,7 +1,7 @@
 <template>
   <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h4 class="mb-0">Sündmused</h4>
+    <h4 class="text-center mb-4">Sündmused</h4>
+    <div class="d-flex justify-content-start mb-3">
       <RouterLink to="/admin-event-form" class="btn btn-dark d-flex align-items-center gap-1">
         Lisa uus sündmus <PhPlus :size="18" />
       </RouterLink>
