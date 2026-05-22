@@ -22,7 +22,7 @@
             class="card-img-top"
             :alt="event.eventName"
             style="height: 200px; object-fit: cover"
-            @error="$set(brokenImages, event.eventName, true)"
+            @error="brokenImages[event.eventName] = true"
           />
           <div v-else class="bg-light d-flex align-items-center justify-content-center" style="height: 200px">
             <ph-image :size="48" color="#aaa" />
