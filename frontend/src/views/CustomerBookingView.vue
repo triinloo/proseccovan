@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h4 class="text-center mb-4">Broneering</h4>
+    <AlertError :error-message="errorMessage" />
     <div class="card p-4">
 
       <h5 class="mb-4">{{ booking.bookingId }} &nbsp; {{ booking.customerName }}</h5>
@@ -69,15 +70,17 @@
 </template>
 
 <script>
+import AlertError from '@/components/alerts/AlertError.vue'
 import BookingService from '@/api-services/BookingService.js'
 import MapModal from '@/components/modals/MapModal.vue'
 
 export default {
   name: 'CustomerBookingView',
-  components: { MapModal },
+  components: { AlertError, MapModal },
   data() {
     return {
       booking: {},
+      errorMessage: '',
     }
   },
   mounted() {
@@ -85,12 +88,18 @@ export default {
       .then((response) => {
         this.booking = response.data
       })
+      .catch(() => {
+        this.errorMessage = 'Broneeringu laadimine ebaõnnestus'
+      })
   },
   methods: {
     cancel() {
       BookingService.cancelBooking(this.$route.params.bookingId)
         .then(() => {
           this.$router.push('/customer-bookings')
+        })
+        .catch(() => {
+          this.errorMessage = 'Broneeringu tühistamine ebaõnnestus'
         })
     },
   },

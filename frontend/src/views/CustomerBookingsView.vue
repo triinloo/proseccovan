@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h4 class="text-center mb-4">Minu broneeringud</h4>
+    <AlertError :error-message="errorMessage" />
     <table class="table table-bordered text-center">
       <thead>
         <tr>
@@ -34,11 +35,13 @@
 </template>
 
 <script>
+import AlertError from '@/components/alerts/AlertError.vue'
 import BookingService from '@/api-services/BookingService.js'
 import { AuthService } from '@/auth/AuthService.js'
 
 export default {
   name: 'CustomerBookingsView',
+  components: { AlertError },
   setup() {
     const authStore = AuthService()
     return { authStore }
@@ -46,12 +49,16 @@ export default {
   data() {
     return {
       bookings: [],
+      errorMessage: '',
     }
   },
   mounted() {
     BookingService.getCustomerBookings(this.authStore.userId)
       .then((response) => {
         this.bookings = response.data
+      })
+      .catch(() => {
+        this.errorMessage = 'Broneeringute laadimine ebaõnnestus'
       })
   },
 }
