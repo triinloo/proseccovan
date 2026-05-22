@@ -17,11 +17,12 @@
       <div class="col" v-for="event in events" :key="event.eventId">
         <div class="card h-100">
           <img
-            v-if="event.imageData"
-            :src="event.imageData"
+            v-if="!brokenImages[event.eventName]"
+            :src="getEventImage(event.eventName)"
             class="card-img-top"
             :alt="event.eventName"
             style="height: 200px; object-fit: cover"
+            @error="$set(brokenImages, event.eventName, true)"
           />
           <div v-else class="bg-light d-flex align-items-center justify-content-center" style="height: 200px">
             <ph-image :size="48" color="#aaa" />
@@ -55,6 +56,7 @@ export default {
     return {
       events: [],
       selectedSeason: 'Kõik',
+      brokenImages: {},
     }
   },
   mounted() {
@@ -64,6 +66,9 @@ export default {
     async fetchEvents() {
       const response = await EventService.getEvents(this.selectedSeason)
       this.events = response.data
+    },
+    getEventImage(name) {
+      return new URL(`../assets/${name}.png`, import.meta.url).href
     },
   },
 }
