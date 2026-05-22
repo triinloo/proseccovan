@@ -29,6 +29,11 @@ const router = createRouter({
       name: 'admin-bookings',
       component: () => import('../views/AdminBookingsView.vue'),
     },
+    {
+      path: '/admin-booking/:bookingId',
+      name: 'admin-booking',
+      component: () => import('../views/AdminBookingView.vue'),
+    },
 
     {
       path: '/booking-form',

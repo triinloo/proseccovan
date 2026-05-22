@@ -25,6 +25,7 @@
           <span v-else class="badge bg-secondary">Tühistatud</span>
         </td>
         <td>
+          <span class="badge bg-secondary me-1" style="cursor: pointer" @click="$router.push('/admin-booking/' + booking.id)">Vaata</span>
           <span v-if="booking.bookingStatus === 'OOTEL'" class="badge bg-success me-1" style="cursor: pointer" @click="confirmBooking(booking.bookingId)">Kinnita</span>
           <span v-if="booking.bookingStatus === 'OOTEL' || booking.bookingStatus === 'KINNITATUD'" class="badge bg-danger" style="cursor: pointer" @click="cancelBooking(booking.bookingId)">Tühista</span>
         </td>
