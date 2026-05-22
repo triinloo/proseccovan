@@ -63,7 +63,11 @@ export default {
         .then((response) => {
           const authStore = AuthService()
           authStore.setAuth(response.data.userId, response.data.roleName)
-          this.$router.push('/customer-bookings')
+          if (response.data.roleName === 'ADMIN') {
+            this.$router.push('/admin-bookings')
+          } else {
+            this.$router.push('/customer-bookings')
+          }
         })
         .catch((error) => {
           this.errorMessage = error.response?.data?.message ?? 'Sisselogimine ebaõnnestus'

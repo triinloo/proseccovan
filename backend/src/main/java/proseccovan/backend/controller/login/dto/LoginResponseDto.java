@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginResponseDto {
     private Integer userId;
-    private String role;
+    private String roleName;
 }
