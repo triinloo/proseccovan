@@ -2,6 +2,7 @@
   <div class="container py-4">
     <h4 class="text-center mb-4">Sündmused</h4>
 
+    <AlertError :error-message="errorMessage" />
     <div class="mb-4">
       <label class="form-label small">Toimumise aeg</label>
       <select class="form-select w-auto" v-model="selectedSeason" @change="fetchEvents">
@@ -46,17 +47,19 @@
 </template>
 
 <script>
+import AlertError from '@/components/alerts/AlertError.vue'
 import EventService from '@/api-services/EventService.js'
 import { PhCalendarBlank, PhMapPin, PhImage } from '@phosphor-icons/vue'
 
 export default {
   name: 'EventsView',
-  components: { PhCalendarBlank, PhMapPin, PhImage },
+  components: { AlertError, PhCalendarBlank, PhMapPin, PhImage },
   data() {
     return {
       events: [],
       selectedSeason: 'Kõik',
       brokenImages: {},
+      errorMessage: '',
     }
   },
   mounted() {
@@ -64,8 +67,13 @@ export default {
   },
   methods: {
     async fetchEvents() {
-      const response = await EventService.getEvents(this.selectedSeason)
-      this.events = response.data
+      this.errorMessage = ''
+      try {
+        const response = await EventService.getEvents(this.selectedSeason)
+        this.events = response.data
+      } catch {
+        this.errorMessage = 'Sündmuste laadimine ebaõnnestus'
+      }
     },
     getEventImage(name) {
       return new URL(`../assets/${name}.png`, import.meta.url).href
