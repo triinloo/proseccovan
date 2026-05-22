@@ -14,6 +14,9 @@ export default {
   cancelBooking(bookingId) {
     return axios.delete(`/api/customer-booking/${bookingId}`)
   },
+  updateBooking(bookingId, data) {
+    return axios.patch(`/api/customer-booking/${bookingId}`, data)
+  },
   getAdminBookingById(bookingId) {
     return axios.get(`/api/admin-bookings/${bookingId}`)
   },

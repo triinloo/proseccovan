@@ -61,7 +61,10 @@
       />
 
       <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-outline-danger" @click="cancel">Tühista</button>
+        <template v-if="booking.bookingStatus === 'OOTEL'">
+          <button class="btn btn-outline-dark" @click="$router.push('/booking-edit/' + $route.params.bookingId)">Muuda</button>
+          <button class="btn btn-outline-danger" @click="cancel">Tühista</button>
+        </template>
         <button class="btn btn-outline-secondary" @click="$router.push('/customer-bookings')">Sulge</button>
       </div>
 

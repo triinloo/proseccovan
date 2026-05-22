@@ -25,6 +25,12 @@ const router = createRouter({
       component: () => import('@/views/CustomerBookingView.vue'),
     },
     {
+      path: '/booking-edit/:bookingId',
+      name: 'booking-edit',
+      component: () => import('@/views/BookingEditView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/admin-bookings',
       name: 'admin-bookings',
       component: () => import('../views/AdminBookingsView.vue'),

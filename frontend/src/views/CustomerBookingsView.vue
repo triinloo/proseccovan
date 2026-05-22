@@ -2,7 +2,7 @@
   <div class="container">
     <h4 class="text-center mb-4">Minu broneeringud</h4>
     <AlertError :error-message="errorMessage" />
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th style="width: 10%">Broneering</th>
@@ -18,18 +18,37 @@
           <td>{{ booking.customerName }}</td>
           <td>{{ booking.bookingDate }}</td>
           <td>
-            <span v-if="booking.bookingStatus === 'OOTEL'" class="badge bg-warning text-dark">Ootel</span>
-            <span v-else-if="booking.bookingStatus === 'KINNITATUD'" class="badge bg-success">Kinnitatud</span>
+            <span v-if="booking.bookingStatus === 'OOTEL'" class="badge bg-warning text-dark"
+              >Ootel</span
+            >
+            <span v-else-if="booking.bookingStatus === 'KINNITATUD'" class="badge bg-success"
+              >Kinnitatud</span
+            >
             <span v-else class="badge bg-secondary">Tühistatud</span>
           </td>
           <td>
-            <button v-if="booking.bookingStatus === 'OOTEL'" class="btn btn-sm btn-outline-secondary" @click="$router.push('/customer-booking/' + booking.id)">Muuda</button>
+            <button
+              v-if="booking.bookingStatus === 'OOTEL'"
+              class="btn btn-sm btn-outline-dark"
+              @click="$router.push('/customer-booking/' + booking.id)"
+            >
+              Muuda
+            </button>
+            <button
+              v-else-if="booking.bookingStatus === 'KINNITATUD'"
+              class="btn btn-sm btn-outline-dark"
+              @click="$router.push('/customer-booking/' + booking.id)"
+            >
+              Vaata
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="d-flex justify-content-end">
-      <button class="btn btn-primary" @click="$router.push({ name: 'booking-form' })">Lisa broneering</button>
+      <button class="btn btn-outline-dark" @click="$router.push({ name: 'booking-form' })">
+        Lisa broneering
+      </button>
     </div>
   </div>
 </template>
