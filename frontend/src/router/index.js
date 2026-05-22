@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { AuthService } from '@/auth/AuthService.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,7 @@ const router = createRouter({
       path: '/booking-form',
       name: 'booking-form',
       component: () => import('../views/BookingFormView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/events',
@@ -54,6 +56,12 @@ const router = createRouter({
       redirect: '/error',
     },
   ],
+})
+
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth && !AuthService().userId) {
+    return { name: 'login' }
+  }
 })
 
 export default router
