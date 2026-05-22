@@ -72,13 +72,24 @@
                 </div>
                 <div class="mb-3">
                   <label for="address" class="form-label">Aadress</label>
-                  <input
-                    id="address"
-                    v-model="address"
-                    type="text"
-                    class="form-control"
-                    placeholder="Sisesta aadress"
-                  />
+                  <div class="d-flex gap-2">
+                    <input
+                      id="address"
+                      v-model="address"
+                      type="text"
+                      class="form-control"
+                      placeholder="Sisesta aadress"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary text-nowrap"
+                      :disabled="!address || geocoding"
+                      @click="findCoordinates"
+                    >
+                      {{ geocoding ? 'Otsib...' : 'Leia koordinaadid' }}
+                    </button>
+                  </div>
+                  <div v-if="geocodeError" class="text-danger small mt-1">{{ geocodeError }}</div>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Asukoht (koordinaadid)</label>
@@ -100,8 +111,8 @@
                     <button
                       type="button"
                       class="btn btn-outline-secondary text-nowrap"
-                      :disabled="!latitude || !longitude"
-                      @click="openMap"
+                      data-bs-toggle="modal"
+                      data-bs-target="#mapModal"
                     >
                       Vaata kaardilt
                     </button>
@@ -130,16 +141,25 @@
       </div>
     </div>
   </div>
+
+  <MapModal
+    :latitude="latitude"
+    :longitude="longitude"
+    :interactive="true"
+    @location-selected="onLocationSelected"
+  />
 </template>
 
 <script>
+import axios from 'axios'
 import AlertError from '@/components/alerts/AlertError.vue'
+import MapModal from '@/components/modals/MapModal.vue'
 import BookingService from '@/api-services/BookingService.js'
 import { AuthService } from '@/auth/AuthService.js'
 
 export default {
   name: 'BookingFormView',
-  components: { AlertError },
+  components: { AlertError, MapModal },
   data() {
     return {
       customerName: '',
@@ -153,6 +173,8 @@ export default {
       latitude: '',
       longitude: '',
       errorMessage: '',
+      geocodeError: '',
+      geocoding: false,
       packages: [
         { value: 'MINI', label: 'Mini (min 20 inimest)' },
         { value: 'MIDI', label: 'Midi (20-40 inimest)' },
@@ -161,8 +183,29 @@ export default {
     }
   },
   methods: {
-    openMap() {
-      window.open(`https://www.google.com/maps?q=${this.latitude},${this.longitude}`, '_blank')
+    async findCoordinates() {
+      this.geocodeError = ''
+      this.geocoding = true
+      try {
+        const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+          params: { q: this.address, format: 'json', limit: 1 },
+          headers: { 'Accept-Language': 'et' },
+        })
+        if (response.data.length === 0) {
+          this.geocodeError = 'Aadressi ei leitud'
+          return
+        }
+        this.latitude = response.data[0].lat
+        this.longitude = response.data[0].lon
+      } catch {
+        this.geocodeError = 'Koordinaatide otsimine ebaõnnestus'
+      } finally {
+        this.geocoding = false
+      }
+    },
+    onLocationSelected({ latitude, longitude }) {
+      this.latitude = latitude
+      this.longitude = longitude
     },
     submitBooking() {
       this.errorMessage = ''

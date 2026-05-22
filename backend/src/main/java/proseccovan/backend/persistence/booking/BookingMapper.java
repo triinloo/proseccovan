@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BookingMapper {
 
+    @Mapping(source = "booking.id", target = "bookingId", qualifiedByName = "formatBookingId")
     @Mapping(source = "userContact.userName", target = "customerName")
     @Mapping(source = "userContact.phone", target = "phoneNumber")
     @Mapping(source = "booking.user.email", target = "email")
@@ -23,6 +24,11 @@ public interface BookingMapper {
     @Mapping(source = "booking.latitude", target = "latitude", qualifiedByName = "bigDecimalToString")
     @Mapping(source = "booking.longitude", target = "longitude", qualifiedByName = "bigDecimalToString")
     BookingResponseDto toDto(Booking booking, UserContact userContact);
+
+    @Named("formatBookingId")
+    default String formatBookingId(Integer id) {
+        return String.format("B%04d", id);
+    }
 
     @Named("formatDate")
     default String formatDate(LocalDate date) {

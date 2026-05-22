@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingResponseDto {
+    private String bookingId;
     private String customerName;
     private String email;
     private String phoneNumber;

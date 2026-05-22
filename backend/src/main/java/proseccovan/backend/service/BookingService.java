@@ -168,6 +168,7 @@ public class BookingService {
     private BookingOverviewDto toBookingOverviewDto(Booking booking) {
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
         return new BookingOverviewDto(
+                booking.getId(),
                 String.format("B%04d", booking.getId()),
                 userContact.getUserName(),
                 booking.getEventDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),

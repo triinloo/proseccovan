@@ -3,7 +3,7 @@
     <h4 class="text-center mb-4">Broneering</h4>
     <div class="card p-4">
 
-      <h5 class="mb-4">{{ $route.params.bookingId }} &nbsp; {{ booking.customerName }}</h5>
+      <h5 class="mb-4">{{ booking.bookingId }} &nbsp; {{ booking.customerName }}</h5>
 
       <div class="row mb-3">
         <div class="col">
@@ -19,9 +19,14 @@
           <div>{{ booking.address }}</div>
         </div>
         <div class="col-auto">
-          <a :href="`https://maps.google.com/?q=${booking.latitude},${booking.longitude}`"
-             target="_blank"
-             class="btn btn-outline-secondary">Vaata kaardil</a>
+          <button
+            v-if="booking.latitude && booking.longitude"
+            class="btn btn-outline-secondary"
+            data-bs-toggle="modal"
+            data-bs-target="#mapModal"
+          >
+            Vaata kaardil
+          </button>
         </div>
       </div>
 
@@ -48,6 +53,12 @@
         <div>{{ booking.bookingInfo }}</div>
       </div>
 
+      <MapModal
+        v-if="booking.latitude && booking.longitude"
+        :latitude="String(booking.latitude)"
+        :longitude="String(booking.longitude)"
+      />
+
       <div class="d-flex justify-content-end gap-2">
         <button class="btn btn-outline-danger" @click="cancel">Tühista</button>
         <button class="btn btn-outline-secondary" @click="$router.push('/customer-bookings')">Sulge</button>
@@ -59,9 +70,11 @@
 
 <script>
 import BookingService from '@/api-services/BookingService.js'
+import MapModal from '@/components/modals/MapModal.vue'
 
 export default {
   name: 'CustomerBookingView',
+  components: { MapModal },
   data() {
     return {
       booking: {},
