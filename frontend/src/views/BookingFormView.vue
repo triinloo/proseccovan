@@ -81,6 +81,33 @@
                   />
                 </div>
                 <div class="mb-3">
+                  <label class="form-label">Asukoht (koordinaadid)</label>
+                  <div class="d-flex gap-2 align-items-center">
+                    <input
+                      id="latitude"
+                      v-model="latitude"
+                      type="text"
+                      class="form-control"
+                      placeholder="Laiuskraad (latitude)"
+                    />
+                    <input
+                      id="longitude"
+                      v-model="longitude"
+                      type="text"
+                      class="form-control"
+                      placeholder="Pikkuskraad (longitude)"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary text-nowrap"
+                      :disabled="!latitude || !longitude"
+                      @click="openMap"
+                    >
+                      Vaata kaardilt
+                    </button>
+                  </div>
+                </div>
+                <div class="mb-3">
                   <label class="form-label">Vali pakett</label>
                   <div v-for="pkg in packages" :key="pkg.value" class="form-check mb-2">
                     <input
@@ -123,6 +150,8 @@ export default {
       address: '',
       bookingInfo: '',
       packageType: '',
+      latitude: '',
+      longitude: '',
       errorMessage: '',
       packages: [
         { value: 'MINI', label: 'Mini (min 20 inimest)' },
@@ -132,6 +161,9 @@ export default {
     }
   },
   methods: {
+    openMap() {
+      window.open(`https://www.google.com/maps?q=${this.latitude},${this.longitude}`, '_blank')
+    },
     submitBooking() {
       this.errorMessage = ''
       if (
@@ -155,11 +187,13 @@ export default {
         bookingType: this.bookingType,
         bookingDate: this.bookingDate,
         address: this.address,
+        latitude: this.latitude,
+        longitude: this.longitude,
         packageType: this.packageType,
         bookingInfo: this.bookingInfo,
       })
         .then(() => {
-          this.$router.push('/')
+          this.$router.push('/customer-bookings')
         })
         .catch((error) => {
           this.errorMessage = error.response?.data?.message ?? 'Päring ebaõnnestus'
