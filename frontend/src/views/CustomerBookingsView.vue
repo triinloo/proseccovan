@@ -28,7 +28,7 @@
       </tbody>
     </table>
     <div class="d-flex justify-content-end">
-      <button class="btn btn-primary">Lisa broneering</button>
+      <button class="btn btn-primary" @click="$router.push({ name: 'booking-form' })">Lisa broneering</button>
     </div>
   </div>
 </template>

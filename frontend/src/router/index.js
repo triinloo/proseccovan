@@ -36,12 +36,21 @@ const router = createRouter({
     {
       path: '/events',
       name: 'events',
-      component: () => import('../views/EventsView.vue'),
+      component: () => import('../views/EventView.vue'),
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: () => import('../views/ErrorView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error',
     },
   ],
 })
