@@ -116,7 +116,7 @@ public class BookingController {
                     Kui paketti ei leita, visatakse viga errorCode'ga 333.""")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404",
+            @ApiResponse(responseCode = "403",
                     description = "Kasutajat või paketti ei leitud",
                     content = @Content(schema = @Schema(implementation = ApiError.class)))})
 
