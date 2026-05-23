@@ -86,7 +86,7 @@ export default {
           this.$router.push('/login')
         })
         .catch((error) => {
-          this.errorMessage = error.response?.data?.message || 'Registreerimine ebaõnnestus'
+          this.errorMessage = error.response?.data?.message ?? 'Registreerimine ebaõnnestus'
         })
     },
   },

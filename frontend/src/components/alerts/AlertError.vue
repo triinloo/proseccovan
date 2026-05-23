@@ -4,7 +4,6 @@
   </p>
 </template>
 
-<!--<AlertError :error-message="errorMessage" />-->
 
 <script>
 export default {
