@@ -150,7 +150,7 @@ export default {
       }
       AdminEventService.createEvent(this.buildPayload())
         .then(() => {
-          this.$router.push('/events')
+          this.$router.push('/admin-events')
         })
         .catch((error) => {
           this.errorMessage = error.response?.data?.message ?? 'Sündmuse loomine ebaõnnestus'

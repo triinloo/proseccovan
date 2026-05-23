@@ -51,10 +51,6 @@ public class RegisterService {
         }
 
     }
-//    private void newUser createAndSaveUser(RegisterRequestDto registerRequestDto){
-//        createUser(registerRequestDto);
-//
-//    }
 
 
 }
