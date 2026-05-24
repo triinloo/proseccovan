@@ -22,6 +22,8 @@ public class LoginController {
 
     private final LoginService loginService;
 
+
+    @PostMapping("/login")
     @Operation(summary = "Sisse logimine. Tagastab userId ja roleName",
             description = """
                     Süsteemist otsitakse email ja password abil kasutajat.
@@ -31,7 +33,6 @@ public class LoginController {
             @ApiResponse(responseCode = "403",
                     description = "Vale email või parool",
                     content = @Content(schema = @Schema(implementation = ApiError.class)))})
-    @PostMapping("/login")
     public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
         return loginService.login(loginRequestDto);
     }

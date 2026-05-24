@@ -39,11 +39,6 @@ public class BookingService {
 
 
 
-    /**
-     * Loob uue broneeringu staatusega O (ootel).
-     * @throws ForbiddenException kui kasutajat ei leita (errorCode 333)
-     * @throws DataNotFoundException kui paketti ei leita (errorCode 333)
-     */
     public void createNewBooking(BookingCreateRequestDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(this::notFound);
@@ -59,10 +54,6 @@ public class BookingService {
                 .build());
     }
 
-    /**
-     * Tagastab ühe broneeringu täisinfo koos kasutaja kontaktandmetega.
-     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
-     */
     public BookingResponseDto getBookingById(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(this::notFound);
@@ -83,10 +74,7 @@ public class BookingService {
         );
     }
 
-    /**
-     * Tagastab kõik broneeringud filtreeritud staatuse järgi.
-     * Staatus võib olla O (ootel), K (kinnitatud) või T (tühistatud).
-     */
+
     public List<BookingOverviewDto> getBookings(String status) {
         List<Booking> bookings = bookingRepository.findBookingsBy(status);
         List<BookingOverviewDto> result = new ArrayList<>();
@@ -96,10 +84,7 @@ public class BookingService {
         return result;
     }
 
-    /**
-     * Tagastab kõik broneeringud kasutaja ID järgi.
-     * @throws DataNotFoundException kui kasutajat ei leita (errorCode 333)
-     */
+
     public List<BookingOverviewDto> getBookingsByUserId(Integer userId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode());
@@ -113,10 +98,7 @@ public class BookingService {
     }
 
 
-    /**
-     * Uuendab broneeringu andmeid (kuupäev, aadress, pakett, kontaktandmed).
-     * @throws DataNotFoundException kui broneeringut või paketti ei leita (errorCode 333)
-     */
+
     @Transactional
     public void updateBooking(Integer bookingId, BookingUpdateRequestDto request) {
         Booking booking = bookingRepository.findById(bookingId)
@@ -134,32 +116,19 @@ public class BookingService {
         userContact.setPhone(request.getPhoneNumber());
     }
 
-    /**
-     * Kinnitab broneeringu, muutes staatuse O → K.
-     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
-     * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 555)
-     */
+
     @Transactional
     public void confirmBooking(Integer bookingId) {
         changeBookingStatus(bookingId, BookingStatus.OOTEL, BookingStatus.KINNITATUD, CONFIRMATION_NOT_ALLOWED);
     }
 
-    /**
-     * Tühistab broneeringu kasutaja poolt, muutes staatuse O → T.
-     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
-     * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 444)
-     */
+
     @Transactional
     public void cancelBooking(Integer bookingId) {
         changeBookingStatus(bookingId, BookingStatus.OOTEL, BookingStatus.TUHISTATUD, CANCELLATION_NOT_ALLOWED);
     }
 
-    /**
-     * Tühistab broneeringu admini poolt, muutes staatuse T.
-     * Lubatud kõigi staatuste puhul peale T (juba tühistatud).
-     * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
-     * @throws ForbiddenException kui broneeringu staatus on juba T (errorCode 444)
-     */
+
     @Transactional
     public void adminCancelBooking(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
