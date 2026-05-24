@@ -1,9 +1,9 @@
 package proseccovan.backend.infrastructure;
 
 import proseccovan.backend.infrastructure.error.ApiError;
+import proseccovan.backend.infrastructure.error.ErrorResponse;
 import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
-import proseccovan.backend.infrastructure.exception.PrimaryKeyNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +33,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handlePrimaryKeyNotFoundException(PrimaryKeyNotFoundException exception) {
-        ApiError apiError = new ApiError();
-        apiError.setMessage(exception.getMessage());
-        apiError.setErrorCode(exception.getErrorCode());
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-    }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -52,7 +44,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiError apiError = new ApiError();
         apiError.setMessage(firstError.getField() + ": " + firstError.getDefaultMessage());
-        apiError.setErrorCode(777);
+        apiError.setErrorCode(ErrorResponse.VALIDATION_ERROR.getErrorCode());
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }

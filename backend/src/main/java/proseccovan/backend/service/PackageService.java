@@ -20,7 +20,6 @@ public class PackageService {
                     dto.setPackageId(p.getId());
                     dto.setPackageName(p.getName());
                     dto.setPackageDescription(p.getDescription());
-                    dto.setIsSelected(false);
                     return dto;
                 })
                 .toList();

@@ -89,15 +89,15 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Vali pakett</label>
-                  <div v-for="pkg in packages" :key="pkg.value" class="form-check mb-2">
+                  <div v-for="pkg in packages" :key="pkg.packageName" class="form-check mb-2">
                     <input
-                      :id="pkg.value"
+                      :id="pkg.packageName"
                       v-model="packageType"
                       type="radio"
-                      :value="pkg.value"
+                      :value="pkg.packageName"
                       class="form-check-input"
                     />
-                    <label :for="pkg.value" class="form-check-label">{{ pkg.label }}</label>
+                    <label :for="pkg.packageName" class="form-check-label">{{ pkg.packageName }} – {{ pkg.packageDescription }}</label>
                   </div>
                 </div>
               </div>
@@ -125,6 +125,7 @@ import axios from 'axios'
 import AlertError from '@/components/alerts/AlertError.vue'
 import MapModal from '@/components/modals/MapModal.vue'
 import BookingService from '@/api-services/BookingService.js'
+import PackageService from '@/api-services/PackageService.js'
 import { AuthService } from '@/auth/AuthService.js'
 
 export default {
@@ -142,14 +143,17 @@ export default {
       errorMessage: '',
       geocodeError: '',
       geocoding: false,
-      packages: [
-        { value: 'MINI', label: 'Mini (min 20 inimest)' },
-        { value: 'MIDI', label: 'Midi (20-40 inimest)' },
-        { value: 'MAXI', label: 'Maxi (40-65 inimest)' },
-      ],
+      packages: [],
     }
   },
   mounted() {
+    PackageService.getPackages()
+      .then((response) => {
+        this.packages = response.data
+      })
+      .catch(() => {
+        this.errorMessage = 'Pakettide laadimine ebaõnnestus'
+      })
     BookingService.getBookingById(this.$route.params.bookingId)
       .then((response) => {
         const b = response.data

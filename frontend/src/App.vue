@@ -11,14 +11,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navMenu">
       <div class="navbar-nav mx-auto">
-        <RouterLink v-if="authStore.role === 'ADMIN'" class="nav-link" to="/admin-bookings">Broneeringud</RouterLink>
+        <RouterLink v-if="role === 'ADMIN'" class="nav-link" to="/admin-bookings">Broneeringud</RouterLink>
         <RouterLink v-else class="nav-link" to="/booking-form">Broneeri</RouterLink>
-        <RouterLink class="nav-link" :to="authStore.role === 'ADMIN' ? '/admin-events' : '/events'">Sündmused</RouterLink>
+        <RouterLink class="nav-link" :to="role === 'ADMIN' ? '/admin-events' : '/events'">Sündmused</RouterLink>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <RouterLink v-if="!authStore.userId" class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
+        <RouterLink v-if="!userId" class="btn btn-outline-dark" to="/login">Logi sisse / registreeri</RouterLink>
         <template v-else>
-          <RouterLink v-if="authStore.role !== 'ADMIN'" to="/customer-bookings" class="btn btn-outline-dark d-flex align-items-center">
+          <RouterLink v-if="role !== 'ADMIN'" to="/customer-bookings" class="btn btn-outline-dark d-flex align-items-center">
             <PhUser :size="20" />
           </RouterLink>
           <button class="btn btn-outline-dark" @click="logout">Logi välja</button>
@@ -31,19 +31,20 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'pinia'
 import { AuthService } from '@/auth/AuthService.js'
 import { PhUser } from '@phosphor-icons/vue'
 
 export default {
   name: 'App',
   components: { PhUser },
-  setup() {
-    const authStore = AuthService()
-    return { authStore }
+  computed: {
+    ...mapState(AuthService, ['role', 'userId']),
   },
   methods: {
+    ...mapActions(AuthService, ['clearAuth']),
     logout() {
-      this.authStore.clearAuth()
+      this.clearAuth()
       this.$router.push('/login')
     },
   },

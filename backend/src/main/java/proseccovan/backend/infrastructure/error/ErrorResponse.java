@@ -9,6 +9,7 @@ public enum ErrorResponse {
     DATA_NOT_FOUND("Andmeid ei leitud", 333),
     CANCELLATION_NOT_ALLOWED("Broneeringut ei saa tühistada", 444),
     CONFIRMATION_NOT_ALLOWED("Broneeringut ei saa kinnitada", 555),
+    VALIDATION_ERROR("Sisestatud andmed on vigased", 777),
     ;
 
     private final String message;

@@ -7,5 +7,4 @@ public class PackageDto {
     private Integer packageId;
     private String packageName;
     private String packageDescription;
-    private Boolean isSelected;
 }

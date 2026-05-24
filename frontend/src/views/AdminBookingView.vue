@@ -62,8 +62,9 @@
 
       <div class="d-flex justify-content-end gap-2">
         <button class="btn btn-outline-secondary" @click="sendEmail">Saada email</button>
-        <button class="btn btn-success" @click="confirm">Kinnita</button>
-        <button class="btn btn-danger" @click="cancel">Tühista</button>
+        <button class="btn btn-outline-dark" @click="$router.push('/admin-bookings')">Sulge</button>
+        <button v-if="booking.bookingStatus === 'OOTEL'" class="btn btn-success" @click="confirm">Kinnita</button>
+        <button v-if="booking.bookingStatus === 'OOTEL' || booking.bookingStatus === 'KINNITATUD'" class="btn btn-danger" @click="cancel">Tühista</button>
       </div>
 
     </div>

@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import proseccovan.backend.controller.register.dto.RegisterRequestDto;
+import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
-import proseccovan.backend.infrastructure.exception.PrimaryKeyNotFoundException;
 import proseccovan.backend.persistence.role.Role;
 import proseccovan.backend.persistence.role.RoleRepository;
 import proseccovan.backend.persistence.user.User;
@@ -19,7 +19,6 @@ import static proseccovan.backend.infrastructure.error.ErrorResponse.EMAIL_ALREA
 @Service
 @RequiredArgsConstructor
 public class RegisterService {
-    public static final int CUSTOMER_ROLE_ID = 2;
     private final UserRepository userRepository;
     private final UserContactRepository userContactRepository;
     private final RoleRepository roleRepository;
@@ -27,8 +26,8 @@ public class RegisterService {
     @Transactional
     public void registerNewCustomer(RegisterRequestDto registerRequestDto) {
         validateEmailIsAvailable(registerRequestDto.getEmail());
-        Role role = roleRepository.findById(CUSTOMER_ROLE_ID)
-                .orElseThrow(() -> new PrimaryKeyNotFoundException("roleId", CUSTOMER_ROLE_ID));
+        Role role = roleRepository.findByName("CUSTOMER")
+                .orElseThrow(() -> new DataNotFoundException("Roll 'CUSTOMER' ei leitud", 333));
 
         User user = new User();
         user.setEmail(registerRequestDto.getEmail());

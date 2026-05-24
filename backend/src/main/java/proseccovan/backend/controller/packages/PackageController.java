@@ -20,8 +20,8 @@ public class PackageController {
     private final PackageService packageService;
 
     @Operation(
-            summary = "Paketite nimekiri. Tagastab packageId, packageName, packageDescription, isSelected",
-            description = "Tagastab kõik paketid andmebaasist. isSelected on alati false — valik toimub frontendis. Autentimine nõutud.")
+            summary = "Paketite nimekiri. Tagastab packageId, packageName, packageDescription",
+            description = "Tagastab kõik paketid andmebaasist. Autentimine nõutud.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     })

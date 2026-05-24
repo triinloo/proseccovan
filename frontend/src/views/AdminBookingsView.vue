@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h4 class="text-center mb-4">Broneeringud</h4>
+    <AlertError :error-message="errorMessage" />
     <div class="mb-3">
       <input v-model="searchQuery" type="text" class="form-control w-25" placeholder="Otsi nime järgi" />
     </div>
@@ -37,13 +38,16 @@
 
 <script>
 import BookingService from '@/api-services/BookingService.js'
+import AlertError from '@/components/alerts/AlertError.vue'
 
 export default {
   name: 'AdminBookingsView',
+  components: { AlertError },
   data() {
     return {
       bookings: [],
       searchQuery: '',
+      errorMessage: '',
     }
   },
   computed: {
@@ -62,19 +66,27 @@ export default {
   },
   methods: {
     confirmBooking(bookingId) {
+      this.errorMessage = ''
       BookingService.confirmBooking(bookingId)
         .then(() => {
           BookingService.getAllBookings().then((response) => {
             this.bookings = response.data
           })
         })
+        .catch((error) => {
+          this.errorMessage = error.response?.data?.message ?? 'Broneeringu kinnitamine ebaõnnestus'
+        })
     },
     cancelBooking(bookingId) {
+      this.errorMessage = ''
       BookingService.adminCancelBooking(bookingId)
         .then(() => {
           BookingService.getAllBookings().then((response) => {
             this.bookings = response.data
           })
+        })
+        .catch((error) => {
+          this.errorMessage = error.response?.data?.message ?? 'Broneeringu tühistamine ebaõnnestus'
         })
     },
   },

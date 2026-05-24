@@ -44,9 +44,9 @@ public class BookingService {
      */
     public void createNewBooking(BookingCreateRequestDto request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
-        Package foundPackage = packageRepository.findPackageByType(request.getPackageType())
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
+        Package foundPackage = packageRepository.findByName(request.getPackageType())
+                .orElseThrow(this::notFound);
         bookingRepository.save(Booking.builder()
                 .user(user)
                 .packageField(foundPackage)
@@ -63,7 +63,7 @@ public class BookingService {
      */
     public BookingResponseDto getBookingById(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
         return new BookingResponseDto(
                 String.format("B%04d", booking.getId()),
@@ -118,9 +118,9 @@ public class BookingService {
     @Transactional
     public void updateBooking(Integer bookingId, BookingCreateRequestDto request) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         Package bookingPackage = packageRepository.findByName(request.getPackageType())
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         UserContact userContact = userContactRepository.findByUser_Id(booking.getUser().getId());
 
         booking.setEventDate(request.getBookingDate());
@@ -137,6 +137,7 @@ public class BookingService {
      * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
      * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 555)
      */
+    @Transactional
     public void confirmBooking(Integer bookingId) {
         changeBookingStatus(bookingId, "O", "K", CONFIRMATION_NOT_ALLOWED);
     }
@@ -146,6 +147,7 @@ public class BookingService {
      * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
      * @throws ForbiddenException kui broneeringu staatus ei ole O (errorCode 444)
      */
+    @Transactional
     public void cancelBooking(Integer bookingId) {
         changeBookingStatus(bookingId, "O", "T", CANCELLATION_NOT_ALLOWED);
     }
@@ -156,9 +158,10 @@ public class BookingService {
      * @throws DataNotFoundException kui broneeringut ei leita (errorCode 333)
      * @throws ForbiddenException kui broneeringu staatus on juba T (errorCode 444)
      */
+    @Transactional
     public void adminCancelBooking(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         if (booking.getStatus().equals("T")) {
             throw new ForbiddenException(CANCELLATION_NOT_ALLOWED.getMessage(), CANCELLATION_NOT_ALLOWED.getErrorCode());
         }
@@ -168,12 +171,16 @@ public class BookingService {
 
     private void changeBookingStatus(Integer bookingId, String requiredStatus, String newStatus, ErrorResponse error) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode()));
+                .orElseThrow(this::notFound);
         if (!booking.getStatus().equals(requiredStatus)) {
             throw new ForbiddenException(error.getMessage(), error.getErrorCode());
         }
         booking.setStatus(newStatus);
         bookingRepository.save(booking);
+    }
+
+    private DataNotFoundException notFound() {
+        return new DataNotFoundException(DATA_NOT_FOUND.getMessage(), DATA_NOT_FOUND.getErrorCode());
     }
 
     private BookingOverviewDto toBookingOverviewDto(Booking booking) {

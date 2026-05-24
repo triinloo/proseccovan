@@ -61,10 +61,6 @@ import { AuthService } from '@/auth/AuthService.js'
 export default {
   name: 'CustomerBookingsView',
   components: { AlertError },
-  setup() {
-    const authStore = AuthService()
-    return { authStore }
-  },
   data() {
     return {
       bookings: [],
@@ -72,7 +68,8 @@ export default {
     }
   },
   mounted() {
-    BookingService.getCustomerBookings(this.authStore.userId)
+    const authStore = AuthService()
+    BookingService.getCustomerBookings(authStore.userId)
       .then((response) => {
         this.bookings = response.data
       })
