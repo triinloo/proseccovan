@@ -46,8 +46,8 @@ public class Event {
     @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "image_url", columnDefinition = "text")
-    private String imageUrl;
+    @Column(name = "image_data", columnDefinition = "text")
+    private String imageData;
 
 
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import proseccovan.backend.controller.booking.dto.BookingCreateRequestDto;
+import proseccovan.backend.controller.booking.dto.BookingUpdateRequestDto;
 import proseccovan.backend.controller.booking.dto.BookingResponseDto;
 import proseccovan.backend.controller.booking.dto.BookingOverviewDto;
 import proseccovan.backend.infrastructure.error.ErrorResponse;
@@ -11,6 +12,7 @@ import proseccovan.backend.infrastructure.exception.DataNotFoundException;
 import proseccovan.backend.infrastructure.exception.ForbiddenException;
 import proseccovan.backend.persistence.booking.Booking;
 import proseccovan.backend.persistence.booking.BookingRepository;
+import proseccovan.backend.persistence.booking.BookingStatus;
 import proseccovan.backend.persistence.booking.BookingStatusMapper;
 import proseccovan.backend.persistence.bookingpackage.Package;
 import proseccovan.backend.persistence.bookingpackage.PackageRepository;
@@ -53,7 +55,7 @@ public class BookingService {
                 .address(request.getAddress())
                 .eventDate(request.getBookingDate())
                 .bookingTypeInfo(request.getBookingInfo())
-                .status("O")
+                .status(BookingStatus.OOTEL.getAbbrev())
                 .build());
     }
 
@@ -116,7 +118,7 @@ public class BookingService {
      * @throws DataNotFoundException kui broneeringut või paketti ei leita (errorCode 333)
      */
     @Transactional
-    public void updateBooking(Integer bookingId, BookingCreateRequestDto request) {
+    public void updateBooking(Integer bookingId, BookingUpdateRequestDto request) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(this::notFound);
         Package bookingPackage = packageRepository.findByName(request.getPackageType())
@@ -139,7 +141,7 @@ public class BookingService {
      */
     @Transactional
     public void confirmBooking(Integer bookingId) {
-        changeBookingStatus(bookingId, "O", "K", CONFIRMATION_NOT_ALLOWED);
+        changeBookingStatus(bookingId, BookingStatus.OOTEL, BookingStatus.KINNITATUD, CONFIRMATION_NOT_ALLOWED);
     }
 
     /**
@@ -149,7 +151,7 @@ public class BookingService {
      */
     @Transactional
     public void cancelBooking(Integer bookingId) {
-        changeBookingStatus(bookingId, "O", "T", CANCELLATION_NOT_ALLOWED);
+        changeBookingStatus(bookingId, BookingStatus.OOTEL, BookingStatus.TUHISTATUD, CANCELLATION_NOT_ALLOWED);
     }
 
     /**
@@ -162,20 +164,20 @@ public class BookingService {
     public void adminCancelBooking(Integer bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(this::notFound);
-        if (booking.getStatus().equals("T")) {
+        if (booking.getStatus().equals(BookingStatus.TUHISTATUD.getAbbrev())) {
             throw new ForbiddenException(CANCELLATION_NOT_ALLOWED.getMessage(), CANCELLATION_NOT_ALLOWED.getErrorCode());
         }
-        booking.setStatus("T");
+        booking.setStatus(BookingStatus.TUHISTATUD.getAbbrev());
         bookingRepository.save(booking);
     }
 
-    private void changeBookingStatus(Integer bookingId, String requiredStatus, String newStatus, ErrorResponse error) {
+    private void changeBookingStatus(Integer bookingId, BookingStatus requiredStatus, BookingStatus newStatus, ErrorResponse error) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(this::notFound);
-        if (!booking.getStatus().equals(requiredStatus)) {
+        if (!booking.getStatus().equals(requiredStatus.getAbbrev())) {
             throw new ForbiddenException(error.getMessage(), error.getErrorCode());
         }
-        booking.setStatus(newStatus);
+        booking.setStatus(newStatus.getAbbrev());
         bookingRepository.save(booking);
     }
 

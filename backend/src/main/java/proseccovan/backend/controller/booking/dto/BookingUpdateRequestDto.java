@@ -9,14 +9,15 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingCreateRequestDto {
+public class BookingUpdateRequestDto {
 
     private Integer userId;
-    private String packageType;
+    private String email;
+    private String phoneNumber;
     private LocalDate bookingDate;
     private String address;
     private String latitude;
     private String longitude;
-    private String bookingInfo;
+    private String packageType;
 
 }

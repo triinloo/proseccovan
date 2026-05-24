@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proseccovan.backend.controller.booking.dto.BookingCreateRequestDto;
+import proseccovan.backend.controller.booking.dto.BookingUpdateRequestDto;
 import proseccovan.backend.controller.booking.dto.BookingResponseDto;
 import proseccovan.backend.controller.booking.dto.BookingOverviewDto;
 import proseccovan.backend.infrastructure.error.ApiError;
@@ -153,7 +154,7 @@ public class BookingController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))})
 
     public void updateBooking(@PathVariable Integer bookingId,
-                              @RequestBody BookingCreateRequestDto request) {
+                              @RequestBody BookingUpdateRequestDto request) {
         bookingService.updateBooking(bookingId, request);
     }
 

@@ -67,7 +67,7 @@ public class EventService {
         event.setStartDate(LocalDate.parse(dto.getEventStartDate()));
         event.setEndDate(LocalDate.parse(dto.getEventEndDate()));
         event.setDescription(dto.getEventDescription());
-        event.setImageUrl(dto.getImageData());
+        event.setImageData(dto.getImageData());
     }
 
     private EventListResponseDto toEventListResponseDto(Event event) {
@@ -78,7 +78,7 @@ public class EventService {
                 event.getStartDate().format(DATE_FORMATTER),
                 event.getEndDate().format(DATE_FORMATTER),
                 event.getLocation(),
-                event.getImageUrl(),
+                event.getImageData(),
                 toSeason(event.getStartDate())
         );
     }
@@ -91,7 +91,7 @@ public class EventService {
                 event.getEndDate().format(DATE_FORMATTER),
                 event.getLocation(),
                 event.getDescription(),
-                event.getImageUrl()
+                event.getImageData()
         );
     }
 

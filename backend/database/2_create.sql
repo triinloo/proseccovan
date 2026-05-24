@@ -27,7 +27,7 @@ CREATE TABLE event (
     start_date date  NOT NULL,
     end_date date  NOT NULL,
     description varchar(500)  NULL,
-    image_url text  NULL,
+    image_data text  NULL,
     CONSTRAINT events_pk PRIMARY KEY (id)
 );
 
